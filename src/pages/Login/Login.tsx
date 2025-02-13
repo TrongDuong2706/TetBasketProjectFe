@@ -1,76 +1,62 @@
-import { useMutation } from '@tanstack/react-query'
-import React, { useContext } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { loginAccount } from 'src/apis/auth.api'
-import { AppContext } from 'src/contexts/app.context'
-import { LoginSchema, schemaLogin } from 'src/utils/rules'
-import { yupResolver } from '@hookform/resolvers/yup'
-import Input from 'src/components/Input'
-type FormData = LoginSchema
-export default function Login() {
-  const navigate = useNavigate()
-  const { setIsAuthenticated } = useContext(AppContext)
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock } from "react-icons/fa";
 
+export default function LoginPage() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setError
-  } = useForm<FormData>({
-    resolver: yupResolver(schemaLogin)
-  })
+    formState: { errors }
+  } = useForm();
 
-  //CALL API LOGIN
-  const registerAccountMutation = useMutation({
-    mutationFn: (body: FormData) => loginAccount(body)
-  })
-
-  const onSubmit = handleSubmit((data) => {
-    registerAccountMutation.mutate(data, {
-      onSuccess: (data) => {
-        toast('Đăng nhập thành công')
-        navigate('/')
-        setIsAuthenticated(true)
-        console.log(data)
-      },
-      onError: (error: any) => {
-        if (error.response?.data) {
-          const { message } = error.response.data
-
-          // Không gọi toast.error(message) để tránh hiển thị lỗi chung
-          if (message.includes('User not existed')) {
-            setError('username', { type: 'manual', message: 'Username không tồn tại' })
-          } else if (message.includes('Unauthenticated')) {
-            setError('password', { type: 'manual', message: 'Mật khẩu chưa đúng' })
-          }
-        }
-      }
-    })
-  })
+  const onSubmit = (data: any) => {
+    console.log("Login data:", data);
+  };
 
   return (
-    <div>
-      <form noValidate onSubmit={onSubmit}>
-        <p>Mời nhập tài khoản</p>
-        <Input
-          name='username'
-          register={register}
-          type='text'
-          errorMessage={errors.username?.message}
-          placeholder='Username'
-        />
-        <p>Mời nhập password</p>
-        <Input
-          name='password'
-          register={register}
-          type='password'
-          errorMessage={errors.password?.message}
-          placeholder='Password'
-        />
-        <button type='submit'>Login</button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-[url('/images/background.jpeg')] bg-cover bg-center relative">
+      <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+
+      <div className="relative z-10 backdrop-blur-xl bg-white/10 border border-white/30 p-8 rounded-2xl shadow-lg w-96 text-center">
+        <h2 className="text-3xl font-bold text-white mb-6 tracking-wide">Đăng Nhập</h2>
+
+        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+          <div className="relative">
+            <FaUser className="absolute left-4 top-4 text-white text-lg" />
+            <input
+              {...register("username", { required: "Vui lòng nhập tài khoản" })}
+              type="text"
+              placeholder="Tài Khoản"
+              className="w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white"
+            />
+            {errors.username && <p className="text-red-300 text-sm mt-1">{errors.username.message as string}</p>}
+          </div>
+
+          <div className="relative">
+            <FaLock className="absolute left-4 top-4 text-white text-lg" />
+            <input
+              {...register("password", { required: "Vui lòng nhập mật khẩu" })}
+              type="password"
+              placeholder="Mật khẩu"
+              className="w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white"
+            />
+            {errors.password && <p className="text-red-300 text-sm mt-1">{errors.password.message as string}</p>}
+          </div>
+
+          <button className="w-full bg-gradient-to-r from-yellow-400 to-red-500 text-white font-semibold py-3 rounded-full hover:scale-105 transition-transform shadow-md">
+            Đăng Nhập
+          </button>
+        </form>
+
+        <p className="mt-4 text-sm text-white">
+          Chưa có tài khoản?{" "}
+          <span className="text-yellow-300 cursor-pointer font-semibold hover:underline" onClick={() => navigate("/register")}>
+            Đăng ký ngay
+          </span>
+        </p>
+      </div>
     </div>
-  )
+  );
 }
