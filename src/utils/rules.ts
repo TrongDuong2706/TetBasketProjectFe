@@ -1,10 +1,17 @@
 import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 import * as yup from 'yup'
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
 export const schema = yup.object({
   username: yup
     .string()
     .required('Tài khoản không được để trống')
+    .min(5, 'Độ dài từ 5-160 ký tự')
+    .max(160, 'Độ dài từ 5-160 ký tự'),
+  email: yup
+    .string()
+    .required('Email không được để trống')
+    .matches(emailRegex, 'Email không đúng định dạng') // Dùng regex kiểm tra
     .min(5, 'Độ dài từ 5-160 ký tự')
     .max(160, 'Độ dài từ 5-160 ký tự'),
   password: yup

@@ -11,7 +11,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { toast } from 'react-toastify'
 type FormData = LoginSchema
 
-
 export default function LoginPage() {
   const navigate = useNavigate()
   const { setIsAuthenticated } = useContext(AppContext)
@@ -43,7 +42,7 @@ export default function LoginPage() {
           const { message } = error.response.data
 
           // Không gọi toast.error(message) để tránh hiển thị lỗi chung
-          if (message.includes('Người dùng không tồn tại')) {
+          if (message.includes('User not existed')) {
             setError('username', { type: 'manual', message: 'Tài khoản không tồn tại' })
           } else if (message.includes('Unauthenticated')) {
             setError('password', { type: 'manual', message: 'Mật khẩu chưa đúng' })
