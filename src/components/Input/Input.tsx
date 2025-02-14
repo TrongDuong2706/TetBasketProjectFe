@@ -12,11 +12,14 @@ export default function Input({ type, errorMessage, name, placeholder, register,
   return (
     <div>
       <div>
-        <label className='block text-gray-700'>
-          <i className='fas fa-user mr-2'></i>
-          <input type={type} placeholder={placeholder} {...register(name, rules)} />
-        </label>
-        <div className='text-teal-600 text-sm mt-1 pl-2'>{errorMessage}</div>
+        <i className='fas fa-user mr-2'></i>
+        <input
+          type={type}
+          placeholder={placeholder}
+          {...register(name, rules)}
+          className='w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white'
+        />
+        {errorMessage && <p className='text-red-300 text-sm mt-1'>{errorMessage}</p>}
       </div>
     </div>
   )
