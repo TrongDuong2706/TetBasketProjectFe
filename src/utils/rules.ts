@@ -4,28 +4,28 @@ import * as yup from 'yup'
 export const schema = yup.object({
   username: yup
     .string()
-    .required('Username là bắt buộc')
+    .required('Tài khoản không được để trống')
     .min(5, 'Độ dài từ 5-160 ký tự')
     .max(160, 'Độ dài từ 5-160 ký tự'),
   password: yup
     .string()
-    .required('Password là bắt buộc')
+    .required('Mật khẩu không được để trống')
     .min(6, 'Độ dài từ 6 - 160 ký tự')
     .max(160, 'Độ dài từ 6 đến 160 ký tự'),
   confirm_password: yup
     .string()
-    .required('Nhập lại password là bắt buộc')
+    .required('Vui lòng nhập lại mật khẩu')
     .min(6, 'Độ dài từ 6 - 160 ký tự')
     .max(160, 'Độ dài từ 6 đến 160 ký tự')
     .oneOf([yup.ref('password')], 'Nhập lại password không khớp'),
   lastName: yup
     .string()
-    .required('Nhập lại last name là bắt buộc')
+    .required('Vui lòng nhập lại tên')
     .min(1, 'Độ dài từ 6 - 160 ký tự')
     .max(160, 'Độ dài từ 6 đến 160 ký tự'),
   firstName: yup
     .string()
-    .required('Nhập lại first name là bắt buộc')
+    .required('Vui lòng nhập lại họ')
     .min(1, 'Độ dài từ 6 - 160 ký tự')
     .max(160, 'Độ dài từ 6 đến 160 ký tự')
 })
@@ -33,23 +33,23 @@ export const schema = yup.object({
 export const schemaLogin = yup.object({
   username: yup
     .string()
-    .required('Username là bắt buộc')
+    .required('Tài khoản không được để trống')
     .min(5, 'Độ dài từ 5-160 ký tự')
     .max(160, 'Độ dài từ 5-160 ký tự'),
   password: yup
     .string()
-    .required('Password là bắt buộc')
+    .required('Mật khẩu không được để trống')
     .min(3, 'Độ dài từ 6 - 160 ký tự')
     .max(160, 'Độ dài từ 6 đến 160 ký tự')
 })
 
 export const schemaPassword = yup.object({
-  password: yup.string().required('password là bắt buộc'),
-  newPassword: yup.string().required('Nhập mật khẩu mới là bắt buộc'),
+  password: yup.string().required('Mật khẩu không được để trống'),
+  newPassword: yup.string().required('Vui lòng xác nhận lại mật khẩu'),
   confirmPassword: yup
     .string()
-    .required('Nhập lại password là bắt buộc')
-    .oneOf([yup.ref('newPassword')], 'Nhập lại password không khớp')
+    .required('Vui lòng xác nhận lại mật khẩu')
+    .oneOf([yup.ref('newPassword')], 'Mật khẩu nhập lại không khớp')
 })
 export type PasswordFormData = yup.InferType<typeof schemaPassword>
 export type LoginSchema = yup.InferType<typeof schemaLogin>
