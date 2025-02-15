@@ -52,7 +52,7 @@ export default function RegisterPage() {
         <div className='w-full md:w-full px-10 pt-5 pb-6 overflow-auto max-h-screen'>
           <h2 className='text-3xl font-bold text-white mb-4 tracking-wide text-center'>Đăng Ký</h2>
 
-          <form className='space-y-3' onSubmit={onSubmit}>
+          <form className='space-y-3' noValidate onSubmit={onSubmit}>
             <div className='grid grid-cols-2 gap-4'>
               <div className='relative'>
                 <FaUser className='absolute left-6 top-3 text-white text-lg' />
