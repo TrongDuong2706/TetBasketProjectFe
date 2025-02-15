@@ -57,11 +57,11 @@ export default function LoginPage() {
       <div className='absolute inset-0 bg-black bg-opacity-20'></div>
 
       <div className='relative z-10 backdrop-blur-xl bg-white/10 border border-white/30 p-8 rounded-2xl shadow-lg w-96 text-center'>
-        <h2 className='text-3xl font-bold text-white mb-6 tracking-wide'>Đăng Nhập</h2>
+        <h2 className='text-3xl font-bold text-white mb-5 tracking-wide'>Đăng Nhập</h2>
 
-        <form className='space-y-5' onSubmit={onSubmit}>
+        <form className='space-y-4' onSubmit={onSubmit}>
           <div className='relative'>
-            <FaUser className='absolute left-6 top-4 text-white text-lg' />
+            <FaUser className='absolute left-6 top-3 text-white text-lg' />
             <Input
               name='username'
               register={register}
@@ -73,7 +73,7 @@ export default function LoginPage() {
           </div>
 
           <div className='relative'>
-            <FaLock className='absolute left-6 top-4 text-white text-lg' />
+            <FaLock className='absolute left-6 top-3 text-white text-lg' />
             <Input
               name='password'
               register={register}
