@@ -34,7 +34,7 @@ export default function Header() {
       {/* Logo + Tìm kiếm + Giỏ hàng */}
       <div className='flex justify-center items-center px-6 py-2 bg-[#A92D22]'>
         {/* Logo */}
-        <img src='/public/images/logo_luxy.jpg' alt='Luxy Store' className='w-14' />
+        <img src='/public/images/logo_test.png' alt='Luxy Store' className='w-14' />
 
         {/* Ô tìm kiếm */}
         <div className='mx-4 w-[50%]'>
