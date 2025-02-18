@@ -79,7 +79,7 @@ export default function Header() {
           <a href='#' className='flex items-center gap-1 hover:text-yellow-200'>
             <Gift size={14} /> QUÀ TẾT
           </a>
-          <a href='#' className='flex items-center gap-1 hover:text-yellow-200'>
+          <a href='/about-luxystore' className='flex items-center gap-1 hover:text-yellow-200'>
             <Info size={14} /> GIỚI THIỆU
           </a>
           <a href='#' className='flex items-center gap-1 hover:text-yellow-200'>

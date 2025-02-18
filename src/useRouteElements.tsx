@@ -6,8 +6,18 @@ import Home from './pages/Home'
 import HomeLayout from './layout/HomeLayout'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import { Routes, Route } from "react-router-dom";
+import AboutLuxyStore from "./components/AboutLuxyStore/AboutLuxyStore";
 
 export default function useRouteElements() {
+
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about-luxystore" element={<AboutLuxyStore />} />
+    </Routes>
+  );
+
   function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext)
     return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
@@ -44,4 +54,5 @@ export default function useRouteElements() {
     }
   ])
   return routeElements
+  
 }
