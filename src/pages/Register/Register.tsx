@@ -6,8 +6,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { registerAccount } from '../../apis/auth.api'
 import { Schema, schema } from '../../utils/rules'
-import { FaUser, FaEnvelope, FaLock, FaRegUserCircle, FaUserCircle } from 'react-icons/fa'
-import Input from 'src/components/Input'
+import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa'
 
 type FormData = Schema
 
@@ -35,7 +34,7 @@ export default function RegisterPage() {
         if (error.response?.data) {
           const { message } = error.response.data
           if (message.includes('User existed')) {
-            setError('username', { type: 'manual', message: 'Tài khoản đã tồn tại' })
+            setError('username', { type: 'manual', message: 'Username đã tồn tại' })
           }
         }
       }
@@ -49,76 +48,78 @@ export default function RegisterPage() {
       {/* Chia Layout thành 2 phần */}
       <div className='relative justify-center z-10 w-[90%] max-w-xl flex bg-white/10 backdrop-blur-xl border border-white/30 rounded-2xl shadow-lg'>
         {/* Form đăng ký */}
-        <div className='w-full md:w-full px-10 pt-5 pb-6 overflow-auto max-h-screen'>
+        <div className='w-full md:w-full p-10 overflow-auto max-h-screen'>
           <h2 className='text-3xl font-bold text-white mb-4 tracking-wide text-center'>Đăng Ký</h2>
 
-          <form className='space-y-3' onSubmit={onSubmit}>
+          <form className='space-y-4' noValidate onSubmit={onSubmit}>
             <div className='grid grid-cols-2 gap-4'>
               <div className='relative'>
-                <FaUser className='absolute left-6 top-3 text-white text-lg' />
-                <Input
-                  name='firstName'
-                  register={register}
+                <FaUser className='absolute left-4 top-4 text-white text-lg' />
+                <input
+                  {...register('firstName')}
                   type='text'
-                  errorMessage={errors.firstName?.message}
-                  placeholder='Họ'
+                  placeholder='Tên'
+                  className='w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white'
                 />
+                {errors.firstName && <p className='text-red-300 text-sm mt-1'>{errors.firstName.message}</p>}
               </div>
 
               <div className='relative'>
-                <FaUser className='absolute left-6 top-3 text-white text-lg' />
-                <Input
-                  name='lastName'
-                  register={register}
+                <FaUser className='absolute left-4 top-4 text-white text-lg' />
+                <input
+                  {...register('lastName')}
                   type='text'
-                  errorMessage={errors.lastName?.message}
-                  placeholder='Tên'
+                  placeholder='Họ'
+                  className='w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white'
                 />
+                {errors.lastName && <p className='text-red-300 text-sm mt-1'>{errors.lastName.message}</p>}
               </div>
             </div>
 
             <div className='relative'>
-              <FaEnvelope className='absolute left-6 top-3 text-white text-lg' />
-              <Input
-                name='email'
-                register={register}
+              <FaEnvelope className='absolute left-4 top-4 text-white text-lg' />
+              <input
+                {...register('email')}
                 type='email'
-                errorMessage={errors.email?.message}
                 placeholder='Email'
+                className='w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white'
               />
+              {errors.email && <p className='text-red-300 text-sm mt-1'>{errors.email.message}</p>}
             </div>
 
             <div className='relative'>
-              <FaUserCircle className='absolute left-6 top-3 text-white text-lg' />
-              <Input
-                name='username'
-                register={register}
+              <FaUser className='absolute left-4 top-4 text-white text-lg' />
+              <input
+                {...register('username')}
                 type='text'
-                errorMessage={errors.username?.message}
-                placeholder='Tài khoản'
+                placeholder='Tài Khoản'
+                className='w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white'
               />
+              {errors.username && <p className='text-red-300 text-sm mt-1'>{errors.username.message}</p>}
             </div>
 
             <div className='relative'>
-              <FaLock className='absolute left-6 top-3 text-white text-lg' />
-              <Input
-                name='password'
-                register={register}
+              <FaLock className='absolute left-4 top-4 text-white text-lg' />
+              <input
+                {...register('password')}
                 type='password'
-                errorMessage={errors.password?.message}
                 placeholder='Mật khẩu'
+                className='w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white'
               />
+              {errors.password && <p className='text-red-300 text-sm mt-1'>{errors.password.message}</p>}
             </div>
 
             <div className='relative'>
-              <FaLock className='absolute left-6 top-3 text-white text-lg' />
-              <Input
-                name='confirm_password'
-                register={register}
+              <FaLock className='absolute left-4 top-4 text-white text-lg' />
+              <input
+                {...register('confirm_password')}
                 type='password'
-                errorMessage={errors.confirm_password?.message}
-                placeholder='Nhập lại mật khẩu'
+                placeholder='Xác nhận mật khẩu'
+                className='w-full pl-12 pr-4 py-3 bg-white/40 text-white border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white'
               />
+              {errors.confirm_password && (
+                <p className='text-red-300 text-sm mt-1'>{errors.confirm_password.message}</p>
+              )}
             </div>
 
             <button className='w-full bg-gradient-to-r from-yellow-400 to-red-500 text-white font-semibold py-3 rounded-full hover:scale-105 transition-transform shadow-lg'>
