@@ -6,6 +6,11 @@ import Home from './pages/Home'
 import HomeLayout from './layout/HomeLayout'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import AdminDashboard from './pages/Admin/AdminDashboard'
+import AdminLayout from './layout/AdminLayout'
+import AdminBasket from './pages/Admin/AdminBasket'
+import AdminAddBasket from './pages/Admin/AdminAddBasket'
+import AdminEditBasket from './pages/Admin/AdminEditBasket'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -41,6 +46,38 @@ export default function useRouteElements() {
           element: <Login />
         }
       ]
+    },
+    {
+      path: '/admin',
+      element: (
+        <AdminLayout>
+          <AdminDashboard />
+        </AdminLayout>
+      )
+    },
+    {
+      path: '/admin/basket',
+      element: (
+        <AdminLayout>
+          <AdminBasket />
+        </AdminLayout>
+      )
+    },
+    {
+      path: '/admin/add-basket',
+      element: (
+        <AdminLayout>
+          <AdminAddBasket />
+        </AdminLayout>
+      )
+    },
+    {
+      path: '/admin/edit-basket/:basketId',
+      element: (
+        <AdminLayout>
+          <AdminEditBasket />
+        </AdminLayout>
+      )
     }
   ])
   return routeElements
