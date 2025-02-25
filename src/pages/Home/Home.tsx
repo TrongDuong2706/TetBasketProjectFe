@@ -2,9 +2,10 @@ import { Button } from "src/components/ui/Button";
 import { Card, CardContent } from "src/components/ui/card";
 
 import { ShoppingCart, Gift, Truck, ShieldCheck } from "lucide-react";
-import Footer from "src/components/HomeFooter/Footer";
+import Footer from "src/components/Footer/Footer";
 import Header from "src/components/HomeHeader/Header";
 import IntroSlider from "src/components/Slide/IntroSlider";
+import OrderInformation from "src/components/OrderInfor/OrderInformation";
 
 export default function HomePage() {
   return (
@@ -43,6 +44,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+
+      <OrderInformation />
 
       {/* Footer */}
       <Footer />
