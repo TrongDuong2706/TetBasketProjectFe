@@ -1,5 +1,4 @@
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-
 import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
 import Home from './pages/Home'
@@ -11,6 +10,7 @@ import AdminLayout from './layout/AdminLayout'
 import AdminBasket from './pages/Admin/AdminBasket'
 import AdminAddBasket from './pages/Admin/AdminAddBasket'
 import AdminEditBasket from './pages/Admin/AdminEditBasket'
+import AdminRoute from './components/AdminRoute/AdminRoute'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -49,36 +49,43 @@ export default function useRouteElements() {
     },
     {
       path: '/admin',
-      element: (
-        <AdminLayout>
-          <AdminDashboard />
-        </AdminLayout>
-      )
-    },
-    {
-      path: '/admin/basket',
-      element: (
-        <AdminLayout>
-          <AdminBasket />
-        </AdminLayout>
-      )
-    },
-    {
-      path: '/admin/add-basket',
-      element: (
-        <AdminLayout>
-          <AdminAddBasket />
-        </AdminLayout>
-      )
-    },
-    {
-      path: '/admin/edit-basket/:basketId',
-      element: (
-        <AdminLayout>
-          <AdminEditBasket />
-        </AdminLayout>
-      )
+      element: <AdminRoute />, // Đảm bảo điều hướng đúng
+      children: [
+        {
+          path: '',
+          element: (
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'basket',
+          element: (
+            <AdminLayout>
+              <AdminBasket />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'add-basket',
+          element: (
+            <AdminLayout>
+              <AdminAddBasket />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'edit-basket/:basketId',
+          element: (
+            <AdminLayout>
+              <AdminEditBasket />
+            </AdminLayout>
+          )
+        }
+      ]
     }
   ])
+
   return routeElements
 }
