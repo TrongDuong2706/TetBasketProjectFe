@@ -11,8 +11,18 @@ import AdminBasket from './pages/Admin/AdminBasket'
 import AdminAddBasket from './pages/Admin/AdminAddBasket'
 import AdminEditBasket from './pages/Admin/AdminEditBasket'
 import AdminRoute from './components/AdminRoute/AdminRoute'
+import { Routes, Route } from "react-router-dom";
+import AboutLuxyStore from "./components/AboutLuxyStore/AboutLuxyStore";
 
 export default function useRouteElements() {
+
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about-luxystore" element={<AboutLuxyStore />} />
+    </Routes>
+  );
+
   function ProtectedRoute() {
     const { isAuthenticated } = useContext(AppContext)
     return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
@@ -88,4 +98,5 @@ export default function useRouteElements() {
   ])
 
   return routeElements
+  
 }
