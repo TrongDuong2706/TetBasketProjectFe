@@ -9,6 +9,7 @@ import { FaUser, FaLock } from 'react-icons/fa'
 import Input from 'src/components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { toast } from 'react-toastify'
+import { isAdmin } from 'src/utils/utils'
 type FormData = LoginSchema
 
 export default function LoginPage() {
@@ -33,8 +34,12 @@ export default function LoginPage() {
     registerAccountMutation.mutate(data, {
       onSuccess: (data) => {
         toast('Đăng nhập thành công')
-        navigate('/')
         setIsAuthenticated(true)
+        if (isAdmin()) {
+          navigate('/admin', { replace: true }) // Chuyển hướng admin
+        } else {
+          navigate('/', { replace: true }) // Chuyển hướng user thường
+        }
         console.log(data)
       },
       onError: (error: any) => {
