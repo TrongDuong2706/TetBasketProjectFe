@@ -29,7 +29,7 @@ export default function AdminDashboard() {
 
       {/* Revenue Chart Placeholder */}
       <div className='mt-4 bg-white p-4 rounded-md shadow-sm border-l-4 border-yellow-500 transition transform hover:scale-105 duration-300'>
-        <h3 className='text-md font-semibold text-yellow-500'>Total Sales</h3>
+        <h3 className='text-md font-semibold text-yellow-500'>Total Saless</h3>
         <p className='text-gray-500 text-xs'>Graph placeholder</p>
       </div>
 
