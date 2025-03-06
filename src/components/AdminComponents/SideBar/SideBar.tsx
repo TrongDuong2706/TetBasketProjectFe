@@ -18,9 +18,11 @@ export default function SideBar() {
               <FaBox className='mr-2' /> Basket
             </li>
           </Link>
-          <li className='flex items-center p-2 hover:bg-red-700 rounded-md transition duration-300'>
-            <FaEnvelope className='mr-2' /> Email
-          </li>
+          <Link to='/admin/orders'>
+            <li className='flex items-center p-2 hover:bg-red-700 rounded-md transition duration-300'>
+              <FaEnvelope className='mr-2' /> Orders
+            </li>
+          </Link>
           <li className='flex items-center p-2 hover:bg-red-700 rounded-md transition duration-300'>
             <FaUser className='mr-2' /> Forms
           </li>

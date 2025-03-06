@@ -30,6 +30,15 @@ export default function Header() {
           <span className='font-semibold'>0967 892 186</span>
         </div>
       </div>
+      {/* Đăng nhập + Đăng ký */}
+      <div className='flex items-center gap-4'>
+        <a href='/login' className='hover:text-yellow-200'>
+          Đăng nhập
+        </a>
+        <a href='/register' className='hover:text-yellow-200'>
+          Đăng ký
+        </a>
+      </div>
 
       {/* Logo + Tìm kiếm + Giỏ hàng */}
       <div className='flex justify-center items-center px-6 py-2 bg-[#A92D22]'>
