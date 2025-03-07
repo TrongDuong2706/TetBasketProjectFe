@@ -13,6 +13,12 @@ import AdminEditBasket from './pages/Admin/AdminEditBasket'
 import AdminRoute from './components/AdminRoute/AdminRoute'
 import ListOrder from './pages/Admin/AdminOrders/ListOrder'
 import OrderDetail from './pages/Admin/AdminOrders/OrderDetail'
+import ListBasketCategory from './pages/Admin/AdminBasketCategory/ListBasketCategory'
+import ListBasketShell from './pages/Admin/AdminBasketShell/ListBasketShell'
+import AddBasketCategory from './pages/Admin/AdminBasketCategory/AddBasketCategory'
+import EditBasketCategory from './pages/Admin/AdminBasketCategory/EditBasketCategory'
+import AddBasketShell from './pages/Admin/AdminBasketShell/AddBasketShell'
+import EditBasketShell from './pages/Admin/AdminBasketShell/EditBasketShell'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -98,6 +104,54 @@ export default function useRouteElements() {
           element: (
             <AdminLayout>
               <OrderDetail />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'basket-category',
+          element: (
+            <AdminLayout>
+              <ListBasketCategory />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'basket-shell',
+          element: (
+            <AdminLayout>
+              <ListBasketShell />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'add-basket-category',
+          element: (
+            <AdminLayout>
+              <AddBasketCategory />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'basket-category/edit/:basketCategoryId',
+          element: (
+            <AdminLayout>
+              <EditBasketCategory />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'add/basket-shell',
+          element: (
+            <AdminLayout>
+              <AddBasketShell />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'basket-shell/edit/:basketShellId',
+          element: (
+            <AdminLayout>
+              <EditBasketShell />
             </AdminLayout>
           )
         }
