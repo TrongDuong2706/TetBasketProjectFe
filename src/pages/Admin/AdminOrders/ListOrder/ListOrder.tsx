@@ -1,43 +1,107 @@
+import { useMutation, useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
-export default function ListOrder() {
+export default function AdminOrder() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm()
+
   const [page, setPage] = useState(1) // Page bắt đầu từ 1
   const pageSize = 3 // Định kích thước trang
+  const [fullName, setFullName] = useState<string | null>(null)
+  const [minPrice, setMinPrice] = useState<number | null>(null)
+  const [maxPrice, setMaxPrice] = useState<number | null>(null)
 
-  // Dữ liệu giả lập cho đơn hàng
-  const orders = [
-    {
-      id: 1,
-      fullName: 'Nguyễn Văn A',
-      address: 'Hà Nội',
-      totalAmount: 500000,
-      phoneNumber: '0123456789',
-      status: 'Đang xử lý'
-    },
-    {
-      id: 2,
-      fullName: 'Trần Thị B',
-      address: 'TP. HCM',
-      totalAmount: 1200000,
-      phoneNumber: '0987654321',
-      status: 'Đã giao'
-    },
-    {
-      id: 3,
-      fullName: 'Lê Quang C',
-      address: 'Đà Nẵng',
-      totalAmount: 800000,
-      phoneNumber: '0912345678',
-      status: 'Đang xử lý'
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['allorders', page, fullName, minPrice, maxPrice],
+    queryFn: () => getALLOrders(page, pageSize, fullName, minPrice, maxPrice)
+  })
+
+  const orders = data?.data.result.elements
+  const pagination = data?.data.result
+
+  // Hàm để reset filter
+  const handleClearFilters = () => {
+    setFullName(null)
+    setMinPrice(null)
+    setMaxPrice(null)
+  }
+
+  // Hàm để xử lý khi nhấn nút search
+  const onSubmit = handleSubmit((dataFilter) => {
+    setFullName(dataFilter.fullName || null)
+
+    const priceRange = parseInt(dataFilter.priceRange, 10)
+    switch (priceRange) {
+      case 1:
+        setMinPrice(null)
+        setMaxPrice(500000)
+        break
+      case 2:
+        setMinPrice(500000)
+        setMaxPrice(1000000)
+        break
+      case 3:
+        setMinPrice(1000000)
+        setMaxPrice(2000000)
+        break
+      case 4:
+        setMinPrice(2000000)
+        setMaxPrice(3000000)
+        break
+      case 5:
+        setMinPrice(3000000)
+        setMaxPrice(null)
+        break
+      default:
+        setMinPrice(null)
+        setMaxPrice(null)
+        break
     }
-    // Thêm dữ liệu nếu cần
-  ]
+
+    console.log('Lọc: ', JSON.stringify(dataFilter, null, 2))
+  })
+
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
       <div className='flex justify-between items-center mb-4'>
         <h1 className='text-2xl font-semibold text-gray-800'>Danh sách đơn hàng</h1>
       </div>
+
+      {/* Search Form */}
+      <form className='bg-white p-4 shadow-md rounded-md flex items-center gap-4 mb-4' onSubmit={onSubmit}>
+        <input
+          type='text'
+          placeholder='Tìm kiếm theo tên'
+          className='border p-2 rounded-md flex-1 min-w-[180px]'
+          {...register('fullName')}
+        />
+
+        <select className='border p-2 rounded-md flex-1 min-w-[150px]' {...register('priceRange')}>
+          <option value=''>Lọc theo giá</option>
+          <option value='1'>Nhỏ hơn 500k</option>
+          <option value='2'>500k - 1 triệu</option>
+          <option value='3'>1 triệu - 2 triệu</option>
+          <option value='4'>2 triệu - 3 triệu</option>
+          <option value='5'>Lớn hơn 3 triệu</option>
+        </select>
+
+        <button className='bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition'>Search</button>
+        <button
+          className='bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition'
+          onClick={(e) => {
+            e.preventDefault()
+            handleClearFilters()
+          }}
+        >
+          Xóa lọc
+        </button>
+      </form>
 
       {/* Bảng danh sách đơn hàng */}
       <div className='bg-white shadow-lg rounded-lg overflow-hidden'>
@@ -54,62 +118,78 @@ export default function ListOrder() {
             </tr>
           </thead>
           <tbody className='text-gray-700'>
-            {orders.map((order) => (
-              <tr key={order.id} className='border-b hover:bg-gray-100'>
-                <td className='py-3 px-4'>{order.id}</td>
-                <td className='py-3 px-4'>{order.fullName}</td>
-                <td className='py-3 px-4'>{order.address}</td>
-                <td className='py-3 px-4'>{order.totalAmount}₫</td>
-                <td className='py-3 px-4'>{order.phoneNumber}</td>
-                <td className='py-3 px-4'>{order.status}</td>
-                <td className='py-3 px-4'>
-                  <div className='flex gap-2'>
-                    <Link to={`/admin/edit-order/${order.id}`}>
-                      <button className='bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition'>
-                        Xem đơn hàng
-                      </button>
-                    </Link>
-                  </div>
+            {isLoading ? (
+              <tr>
+                <td colSpan={7} className='py-3 px-4 text-center'>
+                  Đang tải...
                 </td>
               </tr>
-            ))}
+            ) : isError ? (
+              <tr>
+                <td colSpan={7} className='py-3 px-4 text-center text-red-500'>
+                  Đã có lỗi xảy ra!
+                </td>
+              </tr>
+            ) : (
+              orders?.map((order) => (
+                <tr key={order.orderId} className='border-b hover:bg-gray-100'>
+                  <td className='py-3 px-4'>{order.orderId}</td>
+                  <td className='py-3 px-4'>{order.fullName}</td>
+                  <td className='py-3 px-4'>{order.address}</td>
+                  <td className='py-3 px-4'>{order.totalAmount}₫</td>
+                  <td className='py-3 px-4'>{order.phoneNumber}</td>
+                  <td className='py-3 px-4'>{order.orderStatus}</td>
+                  <td className='py-3 px-4'>
+                    <div className='flex gap-2'>
+                      <Link to={`/admin/orders/${order.orderId}`}>
+                        <button className='bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition'>
+                          Xem đơn hàng
+                        </button>
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
       {/* Phân trang */}
-      <div className='flex justify-center items-center mt-4'>
-        <div className='flex gap-2'>
-          <button
-            className={`px-4 py-2 border rounded-md transition ${page > 1 ? 'hover:bg-gray-200' : 'opacity-50 cursor-not-allowed'}`}
-            disabled={page <= 1}
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          >
-            &laquo;
-          </button>
+      {pagination && (
+        <div className='flex justify-center items-center mt-4'>
+          <div className='flex gap-2'>
+            <button
+              className={`px-4 py-2 border rounded-md transition ${pagination.hasPreviousPage ? 'hover:bg-gray-200' : 'opacity-50 cursor-not-allowed'}`}
+              disabled={!pagination.hasPreviousPage}
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            >
+              &laquo;
+            </button>
 
-          {[...Array(5)].map((_, index) => {
-            const pageNumber = index + 1
-            return (
-              <button
-                key={pageNumber}
-                className={`px-4 py-2 border rounded-md transition ${page === pageNumber ? 'bg-blue-500 text-white' : 'hover:bg-gray-200'}`}
-                onClick={() => setPage(pageNumber)}
-              >
-                {pageNumber}
-              </button>
-            )
-          })}
+            {[...Array(pagination.totalPages)].map((_, index) => {
+              const pageNumber = index + 1
+              return (
+                <button
+                  key={pageNumber}
+                  className={`px-4 py-2 border rounded-md transition ${page === pageNumber ? 'bg-blue-500 text-white' : 'hover:bg-gray-200'}`}
+                  onClick={() => setPage(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              )
+            })}
 
-          <button
-            className={`px-4 py-2 border rounded-md transition ${page < 5 ? 'hover:bg-gray-200' : 'opacity-50 cursor-not-allowed'}`}
-            disabled={page >= 5}
-            onClick={() => setPage((prev) => Math.min(prev + 1, 5))}
-          >
-            &raquo;
-          </button>
+            <button
+              className={`px-4 py-2 border rounded-md transition ${pagination.hasNextPage ? 'hover:bg-gray-200' : 'opacity-50 cursor-not-allowed'}`}
+              disabled={!pagination.hasNextPage}
+              onClick={() => setPage((prev) => Math.min(prev + 1, pagination.totalPages))}
+            >
+              &raquo;
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

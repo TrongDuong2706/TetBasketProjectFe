@@ -1,34 +1,35 @@
 import React from 'react'
 import { FaChartPie, FaBox, FaEnvelope, FaTable, FaUser } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 export default function SideBar() {
+  const location = useLocation() // Lấy đường dẫn hiện tại
+
+  // Danh sách menu
+  const menuItems = [
+    { to: '/admin', icon: <FaChartPie className='mr-2' />, label: 'Dashboard' },
+    { to: '/admin/basket', icon: <FaBox className='mr-2' />, label: 'Basket' },
+    { to: '/admin/orders', icon: <FaEnvelope className='mr-2' />, label: 'Orders' },
+    { to: '/admin/forms', icon: <FaUser className='mr-2' />, label: 'Forms' },
+    { to: '/admin/tables', icon: <FaTable className='mr-2' />, label: 'Tables' }
+  ]
+
   return (
     <div className='sidebar w-56 bg-gradient-to-b from-red-800 to-red-600 shadow-md p-4 text-white rounded-r-xl'>
       <h2 className='text-xl font-semibold mb-6 tracking-wide'>Luxy Gift Tet</h2>
       <nav>
         <ul className='space-y-2'>
-          <Link to='/admin'>
-            <li className='flex items-center p-2 bg-yellow-500 text-red-900 rounded-md font-medium hover:bg-yellow-400 transition duration-300'>
-              <FaChartPie className='mr-2' /> Dashboard
-            </li>
-          </Link>
-          <Link to='/admin/basket'>
-            <li className='flex items-center p-2 hover:bg-red-700 rounded-md transition duration-300'>
-              <FaBox className='mr-2' /> Basket
-            </li>
-          </Link>
-          <Link to='/admin/orders'>
-            <li className='flex items-center p-2 hover:bg-red-700 rounded-md transition duration-300'>
-              <FaEnvelope className='mr-2' /> Orders
-            </li>
-          </Link>
-          <li className='flex items-center p-2 hover:bg-red-700 rounded-md transition duration-300'>
-            <FaUser className='mr-2' /> Forms
-          </li>
-          <li className='flex items-center p-2 hover:bg-red-700 rounded-md transition duration-300'>
-            <FaTable className='mr-2' /> Tables
-          </li>
+          {menuItems.map((item) => (
+            <Link to={item.to} key={item.to}>
+              <li
+                className={`flex items-center p-2 rounded-md font-medium transition duration-300 ${
+                  location.pathname === item.to ? 'bg-yellow-500 text-red-900' : 'hover:bg-red-700'
+                }`}
+              >
+                {item.icon} {item.label}
+              </li>
+            </Link>
+          ))}
         </ul>
       </nav>
     </div>
