@@ -7,16 +7,16 @@ export default function SideBar() {
 
   // Danh sách menu
   const menuItems = [
-    { to: '/admin', icon: <FaChartPie className='mr-2' />, label: 'Dashboard' },
-    { to: '/admin/basket', icon: <FaBox className='mr-2' />, label: 'Basket' },
-    { to: '/admin/orders', icon: <FaEnvelope className='mr-2' />, label: 'Orders' },
-    { to: '/admin/forms', icon: <FaUser className='mr-2' />, label: 'Forms' },
-    { to: '/admin/tables', icon: <FaTable className='mr-2' />, label: 'Tables' }
+    { to: '/admin', icon: <FaChartPie className='mr-2' />, label: 'Trang Chủ' },
+    { to: '/admin/basket-category', icon: <FaUser className='mr-2' />, label: 'Quản lý Loại giỏ hàng' },
+    { to: '/admin/basket-shell', icon: <FaTable className='mr-2' />, label: 'Quản lý Loại vỏ' },
+    { to: '/admin/basket', icon: <FaBox className='mr-2' />, label: 'Quản lý giỏ hàng' },
+    { to: '/admin/orders', icon: <FaEnvelope className='mr-2' />, label: 'Quản lý đơn hàng' }
   ]
 
   return (
     <div className='sidebar w-56 bg-gradient-to-b from-red-800 to-red-600 shadow-md p-4 text-white rounded-r-xl'>
-      <h2 className='text-xl font-semibold mb-6 tracking-wide'>Luxy Gift Tet</h2>
+      <h2 className='text-xl font-semibold mb-6 tracking-wide'>Giỏ Quà Tết</h2>
       <nav>
         <ul className='space-y-2'>
           {menuItems.map((item) => (
