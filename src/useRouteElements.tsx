@@ -11,6 +11,8 @@ import AdminBasket from './pages/Admin/AdminBasket'
 import AdminAddBasket from './pages/Admin/AdminAddBasket'
 import AdminEditBasket from './pages/Admin/AdminEditBasket'
 import AdminRoute from './components/AdminRoute/AdminRoute'
+import ListOrder from './pages/Admin/AdminOrders/ListOrder'
+import OrderDetail from './pages/Admin/AdminOrders/OrderDetail'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -80,6 +82,22 @@ export default function useRouteElements() {
           element: (
             <AdminLayout>
               <AdminEditBasket />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'orders',
+          element: (
+            <AdminLayout>
+              <ListOrder />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'orders/:orderId',
+          element: (
+            <AdminLayout>
+              <OrderDetail />
             </AdminLayout>
           )
         }
