@@ -1,122 +1,88 @@
-import React from 'react'
+import React from 'react';
 
-export default function Footer() {
+const LuxyStorePage: React.FC = () => {
   return (
-    <footer className='bg-[#FDF5E6] py-10 text-[#4A3F35]'>
-      <div className='max-w-screen-xl mx-auto flex justify-between flex-wrap'>
-        {/* Quy định */}
-        <div className='w-full sm:w-1/4 px-4 mb-8 sm:mb-0'>
-          <h3 className='text-xl font-semibold mb-4 text-[#8B4513]'>QUY ĐỊNH</h3>
-          <ul>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Giới thiệu
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Liên hệ
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Quà tết blog
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Chính sách đổi trả
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Chính sách vận chuyển
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Bảo hành sản phẩm
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Dịch vụ quà Tết */}
-        <div className='w-full sm:w-1/4 px-4 mb-8 sm:mb-0'>
-          <h3 className='text-xl font-semibold mb-4 text-[#8B4513]'>DỊCH VỤ QUÀ TẾT</h3>
-          <ul>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Quà tết Hà Nội
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Quà tết Bình Dương
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Quà tết Đồng Nai
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Quà tết Cần Thơ
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Sản phẩm */}
-        <div className='w-full sm:w-1/4 px-4 mb-8 sm:mb-0'>
-          <h3 className='text-xl font-semibold mb-4 text-[#8B4513]'>SẢN PHẨM</h3>
-          <ul>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Quà tết
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Hộp quà tết
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Quà tết công sở
-              </a>
-            </li>
-            <li>
-              <a href='#' className='hover:text-[#8B4513]'>
-                Quà tặng sức khoẻ
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Liên hệ */}
-        <div className='w-full sm:w-1/4 px-4 mb-8 sm:mb-0'>
-          <h3 className='text-xl font-semibold mb-4 text-[#8B4513]'>LIÊN HỆ</h3>
-          <div>
-            <p>
-              <strong>TP HCM:</strong> 14/14 Đường Bàu Bàng, Quận Tân Bình
-            </p>
-            <p>
-              <strong>Hotline:</strong> <span className='text-xl font-bold text-[#B22222]'>0906 330 360</span>
-            </p>
-          </div>
-          <div className='flex gap-4 mt-4'>
-            <img src='facebook-icon.png' alt='Facebook' className='w-8 h-8' />
-            <img src='zalo-icon.png' alt='Zalo' className='w-8 h-8' />
-            <img src='youtube-icon.png' alt='YouTube' className='w-8 h-8' />
+    <div className="p-4" style={{ 
+      fontFamily: 'Roboto, sans-serif',
+      backgroundColor: '#fdf7ec',
+      color: '#4a4a4a' 
+    }}>
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-center items-center md:items-center mb-8">
+          <div className="flex items-center mb-4 md:mb-0">
+            <img
+              src="public/images/logo_luxy.jpg"
+              alt="Luxy Store logo"
+              width={100}
+              height={100}
+              className="mr-4"
+            />
+            <div>
+              <h1 className="text-3xl font-bold">LUXY STORE</h1>
+              <p className="text-sm">Tinh hoa quà Việt</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className='text-center mt-8 text-sm'>
-        <p>© 2023 HappyBox. All Rights Reserved.</p>
+        {/* Flex container for the sections */}
+        <div className="flex flex-col md:flex-row justify-between items-start mb-8">
+          {/* QUY ĐỊNH Section */}
+          <div className="flex-1">
+            <h2 className="font-bold mb-4">QUY ĐỊNH</h2>
+            <ul className="space-y-2">
+              <li>Giới thiệu</li>
+              <li>Liên hệ</li>
+              <li>Quà tết blog</li>
+              <li>Chính sách bảo mật</li>
+              <li>Điều khoản điều kiện</li>
+              <li>Chính sách vận chuyển</li>
+              <li>Chính sách đổi trả</li>
+              <li>Bảo hành sản phẩm</li>
+              <li>Giải quyết khiếu nại</li>
+              <li>Hướng dẫn mua hàng</li>
+              <li>Các câu hỏi &amp; Giải đáp</li>
+            </ul>
+          </div>
+
+          {/* SẢN PHẨM Section */}
+          <div className="flex-1">
+            <h2 className="font-bold mb-4">SẢN PHẨM</h2>
+            <ul className="space-y-2">
+              <li>Quà Tết</li>
+              <li>Hộp quà tết</li>
+              <li>Giỏ quà tết</li>
+              <li>Quà tết doanh nghiệp</li>
+              <li>Quà tết Nhập khẩu</li>
+            </ul>
+          </div>
+
+          {/* VỀ LUXY STORE Section */}
+          <div className="flex-1">
+            <h2 className="font-bold mb-4">VỀ LUXY STORE</h2>
+            <p className="mb-4">
+              Luxy Store là thương hiệu quà tặng cao cấp. Với kinh nghiệm nhiều năm trong lĩnh vực quà Tết, chúng tôi tự tin mang lại cho khách hàng những món quà ý nghĩa, sang trọng, đẳng cấp với chất lượng và dịch vụ tốt nhất.
+            </p>
+            <p>Địa chỉ: 90 Vọng Hà, Quận Hoàn Kiếm, Hà Nội</p>
+            <p>Phone: 091 6855524 - 039 7793333 - 096 7892186</p>
+            <p>Email: info@hcentury.vn - info@luxystore.vn</p>
+            <p>Góp ý &amp; Khiếu nại: 096 789 21 86</p>
+            <p>Giao Hàng Toàn Quốc</p>
+          </div>
+        </div>
+
+        <div className="text-center mb-8">
+          <h2 className="font-bold text-lg">QUÀ TẾT CAO CẤP LUXY STORE</h2>
+          <p className="mt-4">
+            Tặng quà Tết là một trong những văn hoá truyền thống của người Việt Nam mỗi dịp Tết đến Xuân về. Cùng đón tiếp một mùa Xuân mới đang gõ cửa từng nhà, người người háo hức đón chờ từng giây phút thiêng liêng của thời khắc giao thừa, gửi đi những lời chúc tốt đẹp, gửi đi những món quà ý nghĩa. Tết có nhiều loại quà, từ những món quà đơn giản, bình dị đến những món quà sang trọng, đẳng cấp. Luxy Store không chỉ là món quà, mà còn là sự gắn kết tình thân, là những giá trị nhân văn, là những món quà Tết hạnh phúc mà chúng tôi muốn gửi đến bạn. Luxy Store không bán rượu cho người dưới 18 tuổi.
+          </p>
+        </div>
+
+        <div className="text-center text-sm">
+          <p>© 2025 Luxy Store. All rights reserved</p>
+        </div>
       </div>
-    </footer>
-  )
-}
+    </div>
+  );
+};
+
+export default LuxyStorePage;
