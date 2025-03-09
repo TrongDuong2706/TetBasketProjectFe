@@ -1,11 +1,15 @@
 import { Button } from "src/components/ui/Button";
 import { Card, CardContent } from "src/components/ui/card";
-
 import { ShoppingCart, Gift, Truck, ShieldCheck } from "lucide-react";
 import Footer from "src/components/Footer/Footer";
 import Header from "src/components/HomeHeader/Header";
 import IntroSlider from "src/components/Slide/IntroSlider";
 import OrderInformation from "src/components/OrderInfor/OrderInformation";
+import PromoCodes from "src/components/PromoCodes/PromoCodes"; // Import PromoCodes component
+import ProductBox from "src/components/Product/ProductBox";
+import FlashSalePage from "src/components/Product/FlashSalePage"; // Import FlashSalePage component
+import SignupSalePage from "src/components/Product/SignupSalePage";
+import ProductPage from "src/components/Product/ProductPage"
 
 export default function HomePage() {
   return (
@@ -25,27 +29,35 @@ export default function HomePage() {
           
           {/* Thay thế phần Catalogue bằng 4 nút */}
           <div className="mt-10 grid grid-cols-4 gap-4">
-            <Button className="bg-[#f7e5d4] hover:bg-yellow-500 text-black p-4 rounded-lg text-lg flex flex-col items-center">
+            <Button className="bg-[#f8e4d4] hover:bg-[#d84444] text-black p-4 rounded-lg text-lg flex flex-col items-center">
               <Gift className="mb-2 text-4xl text-black" />
               <span className="text-black">Quà Tết</span>
             </Button>
-            <Button className="bg-[#f7e5d4] hover:bg-yellow-500 text-black p-4 rounded-lg text-lg flex flex-col items-center">
+            <Button className="bg-[#f8e4d4] hover:bg-[#d84444] text-black p-4 rounded-lg text-lg flex flex-col items-center">
               <Truck className="mb-2 text-4xl text-black" />
               <span className="text-black">Hộp quà Tết</span>
             </Button>
-            <Button className="bg-[#f7e5d4] hover:bg-yellow-500 text-black p-4 rounded-lg text-lg flex flex-col items-center">
+            <Button className="bg-[#f8e4d4] hover:bg-[#d84444] text-black p-4 rounded-lg text-lg flex flex-col items-center">
               <ShoppingCart className="mb-2 text-4xl text-black" />
               <span className="text-black">Giỏ quà Tết</span>
             </Button>
-            <Button className="bg-[#f7e5d4] hover:bg-yellow-500 text-black p-4 rounded-lg text-lg flex flex-col items-center">
+            <Button className="bg-[#f8e4d4] hover:bg-[#d84444] text-black p-4 rounded-lg text-lg flex flex-col items-center">
               <ShieldCheck className="mb-2 text-4xl text-black" />
               <span className="text-black">Quà tặng sức khỏe</span>
             </Button>
           </div>
         </div>
+
+        {/* PromoCodes Component */}
+        <PromoCodes />
+              {/* FlashSalePage Component */}
+      <FlashSalePage /> {/* Add FlashSalePage after PromoCodes */}
+      <SignupSalePage />
+      <ProductPage />
+      <ProductPage />
+
       </section>
-
-
+      {/* Order Information Section */}
       <OrderInformation />
 
       {/* Footer */}
