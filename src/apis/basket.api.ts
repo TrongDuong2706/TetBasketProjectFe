@@ -1,9 +1,12 @@
-import { BasketResponse, BasketSingle } from 'src/types/basket.type'
+import { AllBasket, BasketResponse, BasketSingle } from 'src/types/basket.type'
 import http from 'src/utils/http'
 
 //Lấy tất cả giỏ hàng
 export const getBaskets = (page: number, size: number) =>
   http.get<BasketResponse>('/basket', { params: { page, size } })
+
+//Lấy tất cả giỏ hàng ko lọc
+export const getAllsBasket = () => http.get<AllBasket>('/basket/getAllBasket')
 
 //Lấy một giỏ hàng
 export const getOneBasket = (basketId: any) => http.get<BasketSingle>(`/basket/${basketId}`)
