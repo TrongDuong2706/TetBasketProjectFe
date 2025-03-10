@@ -1,49 +1,88 @@
-import React from "react";
-import { Facebook, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import React from 'react';
 
-export default function Footer() {
+const LuxyStorePage: React.FC = () => {
   return (
-    <footer className="bg-gray-900 text-white py-8">
-      <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        {/* Cột 1: Logo & Mô tả */}
-        <div>
-          <h2 className="text-2xl font-bold">HappyBox</h2>
-          <p className="mt-2 text-gray-400">Mang đến những món quà ý nghĩa cho người thân yêu.</p>
-        </div>
-
-        {/* Cột 2: Liên hệ */}
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Liên hệ</h3>
-          <p className="flex items-center gap-2 text-gray-400">
-            <Phone size={16} /> 0123 456 789
-          </p>
-          <p className="flex items-center gap-2 text-gray-400 mt-1">
-            <Mail size={16} /> contact@happybox.vn
-          </p>
-          <p className="flex items-center gap-2 text-gray-400 mt-1">
-            <MapPin size={16} /> 123 Đường ABC, TP. Hồ Chí Minh
-          </p>
-        </div>
-
-        {/* Cột 3: Mạng xã hội */}
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Theo dõi chúng tôi</h3>
-          <div className="flex gap-4">
-            <a href="#" className="text-gray-400 hover:text-white">
-              <Facebook size={24} />
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white">
-              <Instagram size={24} />
-            </a>
+    <div className="p-4" style={{ 
+      fontFamily: 'Roboto, sans-serif',
+      backgroundColor: '#fdf7ec',
+      color: '#4a4a4a' 
+    }}>
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-center items-center md:items-center mb-8">
+          <div className="flex items-center mb-4 md:mb-0">
+            <img
+              src="public/images/logo_luxy.jpg"
+              alt="Luxy Store logo"
+              width={100}
+              height={100}
+              className="mr-4"
+            />
+            <div>
+              <h1 className="text-3xl font-bold">LUXY STORE</h1>
+              <p className="text-sm">Tinh hoa quà Việt</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Copyright */}
-      <div className="border-t border-gray-700 mt-6 pt-4 text-center text-gray-500 text-sm">
-        &copy; 2025 HappyBox. All rights reserved.
+        {/* Flex container for the sections */}
+        <div className="flex flex-col md:flex-row justify-between items-start mb-8">
+          {/* QUY ĐỊNH Section */}
+          <div className="flex-1">
+            <h2 className="font-bold mb-4">QUY ĐỊNH</h2>
+            <ul className="space-y-2">
+              <li>Giới thiệu</li>
+              <li>Liên hệ</li>
+              <li>Quà tết blog</li>
+              <li>Chính sách bảo mật</li>
+              <li>Điều khoản điều kiện</li>
+              <li>Chính sách vận chuyển</li>
+              <li>Chính sách đổi trả</li>
+              <li>Bảo hành sản phẩm</li>
+              <li>Giải quyết khiếu nại</li>
+              <li>Hướng dẫn mua hàng</li>
+              <li>Các câu hỏi &amp; Giải đáp</li>
+            </ul>
+          </div>
+
+          {/* SẢN PHẨM Section */}
+          <div className="flex-1">
+            <h2 className="font-bold mb-4">SẢN PHẨM</h2>
+            <ul className="space-y-2">
+              <li>Quà Tết</li>
+              <li>Hộp quà tết</li>
+              <li>Giỏ quà tết</li>
+              <li>Quà tết doanh nghiệp</li>
+              <li>Quà tết Nhập khẩu</li>
+            </ul>
+          </div>
+
+          {/* VỀ LUXY STORE Section */}
+          <div className="flex-1">
+            <h2 className="font-bold mb-4">VỀ LUXY STORE</h2>
+            <p className="mb-4">
+              Luxy Store là thương hiệu quà tặng cao cấp. Với kinh nghiệm nhiều năm trong lĩnh vực quà Tết, chúng tôi tự tin mang lại cho khách hàng những món quà ý nghĩa, sang trọng, đẳng cấp với chất lượng và dịch vụ tốt nhất.
+            </p>
+            <p>Địa chỉ: 90 Vọng Hà, Quận Hoàn Kiếm, Hà Nội</p>
+            <p>Phone: 091 6855524 - 039 7793333 - 096 7892186</p>
+            <p>Email: info@hcentury.vn - info@luxystore.vn</p>
+            <p>Góp ý &amp; Khiếu nại: 096 789 21 86</p>
+            <p>Giao Hàng Toàn Quốc</p>
+          </div>
+        </div>
+
+        <div className="text-center mb-8">
+          <h2 className="font-bold text-lg">QUÀ TẾT CAO CẤP LUXY STORE</h2>
+          <p className="mt-4">
+            Tặng quà Tết là một trong những văn hoá truyền thống của người Việt Nam mỗi dịp Tết đến Xuân về. Cùng đón tiếp một mùa Xuân mới đang gõ cửa từng nhà, người người háo hức đón chờ từng giây phút thiêng liêng của thời khắc giao thừa, gửi đi những lời chúc tốt đẹp, gửi đi những món quà ý nghĩa. Tết có nhiều loại quà, từ những món quà đơn giản, bình dị đến những món quà sang trọng, đẳng cấp. Luxy Store không chỉ là món quà, mà còn là sự gắn kết tình thân, là những giá trị nhân văn, là những món quà Tết hạnh phúc mà chúng tôi muốn gửi đến bạn. Luxy Store không bán rượu cho người dưới 18 tuổi.
+          </p>
+        </div>
+
+        <div className="text-center text-sm">
+          <p>© 2025 Luxy Store. All rights reserved</p>
+        </div>
       </div>
-    </footer>
+    </div>
   );
-}
+};
+
+export default LuxyStorePage;
