@@ -13,6 +13,7 @@ import {
   ArrowDown,
   ChevronDown
 } from 'lucide-react'
+import SearchInput from '../SearchInput/SearchInput'
 
 export default function Header() {
   return (
@@ -51,14 +52,7 @@ export default function Header() {
 
         {/* Ô tìm kiếm */}
         <div className='mx-4 w-[50%]'>
-          <div className='relative'>
-            <input
-              type='text'
-              placeholder='Tìm kiếm sản phẩm'
-              className='w-full py-2 pl-4 pr-8 rounded bg-[#feffea] text-black text-sm focus:outline-none focus:ring-0'
-            />
-            <Search className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800' size={16} />
-          </div>
+          <SearchInput />
         </div>
 
         {/* Yêu thích + Giỏ hàng */}
