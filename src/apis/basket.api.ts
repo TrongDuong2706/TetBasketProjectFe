@@ -44,13 +44,7 @@ export const getFilterBasket = (
     params: { page, size, name, minPrice, maxPrice, categoryId, status }
   })
 
-  //Lọc giỏ hàng theo tên
-export const getBasketByName = (
-  page: number,
-  size: number,
-  name: string | null = null,
-
-) =>
+export const getBasketByName = (page: number, size: number, name: string | null = null) =>
   http.get<BasketResponse>('/basket/getBasketByName', {
-    params: { page, size, name }
+    params: { page, size, name } // Đảm bảo name được truyền vào đúng cách
   })

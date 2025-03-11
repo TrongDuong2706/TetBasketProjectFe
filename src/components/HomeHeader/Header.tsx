@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   Search,
   ShoppingBag,
@@ -10,52 +10,82 @@ import {
   Newspaper,
   Book,
   PhoneCall,
-  ArrowDown,
   ChevronDown
 } from 'lucide-react'
 import SearchInput from '../SearchInput/SearchInput'
+import { useNavigate } from 'react-router-dom'
+import { AppContext } from 'src/contexts/app.context'
+import { useMutation } from '@tanstack/react-query'
+import { LogoutAccount } from 'src/apis/auth.api'
+import { getAccessTokenFromLS } from 'src/utils/auth'
 
 export default function Header() {
+  const navigate = useNavigate()
+  const { isAuthenticated, setIsAuthenticated } = useContext(AppContext)
+
+  const logOutAccountMutation = useMutation({
+    mutationFn: (token: any) => LogoutAccount({ token })
+  })
+
+  const handleLogout = () => {
+    const tokenWithPrefix = getAccessTokenFromLS()
+    const token = tokenWithPrefix ? tokenWithPrefix.replace('Bearer ', '') : null
+
+    if (token) {
+      logOutAccountMutation.mutate(token, {
+        onSuccess: () => {
+          navigate('/')
+          setIsAuthenticated(false)
+        },
+        onError: (error) => {
+          console.error('Logout failed:', error)
+        }
+      })
+    }
+  }
+
   return (
     <header className='bg-[#8B1E15] text-white'>
-      {/* Thanh trên cùng */}
       <div className='max-w-8xl mx-2 flex justify-center items-center px-4 py-2 text-sm gap-96'>
-        {/* Slogan */}
         <span className='font-medium tracking-wide text-yellow-200'>
           Tết đủ đầy, quà tinh tế - Luxy Store trao tay!
         </span>
 
         <div className='flex items-center gap-4'>
-          {/* Số điện thoại */}
           <div className='flex items-center gap-2'>
             <PhoneCall size={14} className='text-yellow-300' />
             <span className='font-semibold'>0967 892 186</span>
           </div>
 
-          {/* Đăng nhập / Đăng ký */}
-          <div className='flex items-center gap-4'>
-            <a href='/login' className='hover:text-yellow-200'>
-              Đăng nhập
-            </a>
-            <span>|</span>
-            <a href='/register' className='hover:text-yellow-200'>
-              Đăng ký
-            </a>
-          </div>
+          {isAuthenticated ? (
+            <div className='flex items-center gap-4'>
+              <span className='font-semibold'>Chào mừng khách hàng!</span>
+              <button
+                onClick={handleLogout}
+                className='px-4 py-1 text-sm font-medium bg-red-500 rounded hover:bg-red-600'
+              >
+                Đăng xuất
+              </button>
+            </div>
+          ) : (
+            <div className='flex items-center gap-4'>
+              <a href='/login' className='hover:text-yellow-200'>
+                Đăng nhập
+              </a>
+              <span>|</span>
+              <a href='/register' className='hover:text-yellow-200'>
+                Đăng ký
+              </a>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Logo + Tìm kiếm + Giỏ hàng */}
       <div className='flex justify-center items-center px-6 py-2 bg-[#A92D22]'>
-        {/* Logo */}
         <img src='/public/images/logo_luxy.jpg' alt='Luxy Store' className='w-20' />
-
-        {/* Ô tìm kiếm */}
         <div className='mx-4 w-[50%]'>
           <SearchInput />
         </div>
-
-        {/* Yêu thích + Giỏ hàng */}
         <div className='flex items-center gap-4'>
           <div className='relative flex items-center'>
             <Heart size={18} />
@@ -68,16 +98,10 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Menu điều hướng */}
       <nav className='bg-[#A92D22] w-full pt-2 pb-3 flex justify-center gap-20'>
         <button className='bg-[#D73E29] font-semibold text-sm px-7 py-1 rounded flex items-center gap-1'>
-          <span className='flex items-center gap-1'>
-            <Gift size={16} />
-            DANH MỤC
-          </span>
-          <span>
-            <ChevronDown size={16} />
-          </span>
+          <Gift size={16} /> DANH MỤC
+          <ChevronDown size={16} />
         </button>
         <div className='flex justify-center gap-7 text-sm font-semibold'>
           <a href='#' className='flex items-center gap-1 hover:text-yellow-200'>
