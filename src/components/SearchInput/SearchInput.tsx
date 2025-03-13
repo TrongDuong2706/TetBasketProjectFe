@@ -1,42 +1,28 @@
 import { useQuery } from '@tanstack/react-query'
 import { Search } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { getBasketByName } from 'src/apis/basket.api'
 
 export default function SearchInput() {
-  const [query, setQuery] = useState('') // Giá trị tìm kiếm
-  const [filteredProducts, setFilteredProducts] = useState<any[]>([]) // Các sản phẩm đã lọc
-  const [page, setPage] = useState(1) // Trang bắt đầu từ 1
-  const pageSize = 5 // Kích thước trang
-  const [name, setName] = useState<string | null>(null) // Tên giỏ hàng để tìm kiếm
+  const [query, setQuery] = useState('')
+  const [name, setName] = useState<string | null>(null) // Tên tìm kiếm để gửi API
+  const [page, setPage] = useState(1)
+  const pageSize = 5
 
-  // Gọi API để lấy giỏ hàng theo tên và phân trang
+  // Gọi API tìm kiếm giỏ hàng
   const { data, isLoading, isError } = useQuery({
     queryKey: ['getBasketByName', page, name],
-    queryFn: () => getBasketByName(page, pageSize, name || ''), // Truyền name vào API
-    enabled: true // Luôn gọi API khi có sự thay đổi
+    queryFn: () => getBasketByName(page, pageSize, name || ''),
+    enabled: !!name // Chỉ gọi API khi có `name`
   })
 
-  const basket = data?.data.result.elements || [] // Lấy sản phẩm từ API
+  const baskets = data?.data.result.elements || [] // API trả về list sản phẩm
 
-  // Cập nhật sản phẩm khi query thay đổi
-  useEffect(() => {
-    if (!query) {
-      setFilteredProducts(basket) // Nếu không có tìm kiếm, lấy tất cả sản phẩm
-    } else {
-      setFilteredProducts(
-        basket.filter(
-          (product) => product.name.toLowerCase().includes(query.toLowerCase()) // Lọc theo tên sản phẩm
-        )
-      )
-    }
-  }, [query, basket])
-
-  // Xử lý khi người dùng gõ vào ô tìm kiếm
+  // Xử lý khi người dùng nhập vào ô tìm kiếm
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setQuery(value) // Cập nhật giá trị tìm kiếm
-    setName(value) // Cập nhật tên để gọi API
+    setQuery(value)
+    setName(value) // Cập nhật `name` để gọi API
   }
 
   if (isLoading) return <div>Loading...</div>
@@ -55,11 +41,11 @@ export default function SearchInput() {
 
       {/* Hiển thị danh sách sản phẩm tìm được */}
       {query && (
-        <div className='absolute w-full bg-white border border-gray-300 rounded mt-1'>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
+        <div className='absolute w-full bg-white border border-gray-300 rounded mt-1 max-h-60 overflow-y-auto'>
+          {baskets.length > 0 ? (
+            baskets.map((product) => (
               <div key={product.id} className='p-2 hover:bg-gray-100 flex items-center'>
-                <img src={product.images[0]?.imageUrl} alt={product.name} className='w-10 h-10 mr-2' />
+                <img src={product.images[0]?.imageUrl} className='w-10 h-10 mr-2' />
                 <div>
                   <div className='text-black'>{product.name}</div>
                   <div className='text-gray-500'>{product.price} VND</div>
@@ -67,7 +53,7 @@ export default function SearchInput() {
               </div>
             ))
           ) : (
-            <div className='p-2 text-gray-500'>No products found</div>
+            <div className='p-2 text-gray-500'>Không tìm thấy sản phẩm</div>
           )}
         </div>
       )}
