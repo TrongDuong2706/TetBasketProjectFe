@@ -47,11 +47,11 @@ export default function SearchInput() {
       <input
         type='text'
         placeholder='Tìm kiếm sản phẩm'
-        className='w-full py-2 pl-4 pr-8 rounded bg-[#feffea] text-black text-sm focus:outline-none focus:ring-0'
+        className='w-full py-3 pl-4 pr-8 rounded bg-[#feffea] text-black text-sm focus:outline-none focus:ring-0'
         value={query}
         onChange={handleInputChange}
       />
-      <Search className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800' size={16} />
+      <Search className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800' size={18} />
 
       {/* Hiển thị danh sách sản phẩm tìm được */}
       {query && (

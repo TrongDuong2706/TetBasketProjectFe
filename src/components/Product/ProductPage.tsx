@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
+import { useNavigate } from 'react-router-dom' // Import useNavigate
 import { getAllsBasket } from 'src/apis/basket.api'
 
 const ProductPage: React.FC = () => {
+  const navigate = useNavigate() // Khởi tạo navigate
+
   // Lấy danh sách BasketShell từ API
   const { data, isLoading, isError } = useQuery({
     queryKey: ['getAllsBasket'],
@@ -18,8 +21,8 @@ const ProductPage: React.FC = () => {
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='text-center mb-8'>
-        <h1 className='text-lg font-light'>Quà Tết Happybox</h1>
-        <h2 className='text-3xl font-bold'>HỘP QUÀ TẾT CAO CẤP</h2>
+        <h1 className='text-lg font-medium'>Quà Tết Happybox</h1>
+        <h2 className='text-3xl font-bold mt-2'>HỘP QUÀ TẾT CAO CẤP</h2>
         <p className='mt-2 text-sm'>
           Hộp quà Tết Happybox được lựa chọn từ những sản phẩm cao cấp, chất lượng thượng hạng cùng với hộp quà được làm
           tỉ mỉ, đẹp và sang trọng, đẳng cấp.
@@ -28,7 +31,11 @@ const ProductPage: React.FC = () => {
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
         {/* Render các sản phẩm từ danh sách baskets */}
         {baskets?.map((basket) => (
-          <div key={basket.id} className='border p-4 bg-white'>
+          <div
+            key={basket.id}
+            className='border p-4 bg-white cursor-pointer'
+            onClick={() => navigate(`/product/${basket.id}`)} // Điều hướng đến chi tiết sản phẩm
+          >
             <div className='relative'>
               {/* Kiểm tra nếu images tồn tại và có phần tử */}
               {basket.images && basket.images[0] && (
