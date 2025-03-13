@@ -18,11 +18,11 @@ const ProductPage: React.FC = () => {
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='text-center mb-8'>
-        <h1 className='text-lg font-light'>Quà Tết Happybox</h1>
+        <h1 className='text-lg font-light'>Quà Tết Luxy</h1>
         <h2 className='text-3xl font-bold'>HỘP QUÀ TẾT CAO CẤP</h2>
         <p className='mt-2 text-sm'>
-          Hộp quà Tết Happybox được lựa chọn từ những sản phẩm cao cấp, chất lượng thượng hạng cùng với hộp quà được làm
-          tỉ mỉ, đẹp và sang trọng, đẳng cấp.
+          Hộp quà Tết Luxy được lựa chọn từ những sản phẩm cao cấp, chất lượng thượng hạng cùng với hộp quà được làm tỉ
+          mỉ, đẹp và sang trọng, đẳng cấp.
         </p>
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
@@ -30,15 +30,28 @@ const ProductPage: React.FC = () => {
         {baskets?.map((basket) => (
           <div key={basket.id} className='border p-4 bg-white'>
             <div className='relative'>
+              {/* SALE Tag */}
+              <span className='absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full'>SALE</span>
+
               {/* Kiểm tra nếu images tồn tại và có phần tử */}
               {basket.images && basket.images[0] && (
-                <img className='w-full h-auto' height='300' src={basket.images[0].imageUrl} width='300' />
+                <img
+                  className='w-full h-[400px]'
+                  height='300'
+                  src='https://static.nhabuon68.com/uploads/nhabuon68/product/img-0665_1697625612.JPG'
+                  width='300'
+                />
               )}
             </div>
             <h3 className='mt-4 text-sm'>{basket.name}</h3>
             <p className='text-xs text-gray-500'>{basket.price}</p>
             <p className='mt-2 text-red-500 font-bold'>{basket.description} đ</p>
             {basket.quantity && <p className='text-xs line-through'>{basket.status} đ</p>}
+
+            {/* Add to Cart button */}
+            <div className='mt-4'>
+              <button className='bg-red-500 text-white px-4 py-2 rounded-full w-full'>Add to Cart</button>
+            </div>
           </div>
         ))}
       </div>
