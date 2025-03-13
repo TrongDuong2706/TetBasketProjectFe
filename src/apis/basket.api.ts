@@ -49,11 +49,16 @@ export const getBasketByName = (page: number, size: number, name: string | null 
     params: { page, size, name } // Đảm bảo name được truyền vào đúng cách
   })
 
+export const getBasketByCategory = (page: number, size: number) =>
+  http.get<BasketResponse>('/basket/getBasketByCategory', {
+    params: { page, size } // Đảm bảo name được truyền vào đúng cách
+  })
+
 // Đảm bảo endpoint và dữ liệu trả về đúng
 export const getBasketById = async (basketId: any) => {
-  const response = await fetch(`/api/basket/${basketId}`);  // Đảm bảo endpoint đúng
+  const response = await fetch(`/api/basket/${basketId}`) // Đảm bảo endpoint đúng
   if (!response.ok) {
-    throw new Error('Error fetching product');
+    throw new Error('Error fetching product')
   }
-  return response.json();  // Trả về dữ liệu đúng
+  return response.json() // Trả về dữ liệu đúng
 }
