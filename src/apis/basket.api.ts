@@ -1,9 +1,12 @@
-import { BasketResponse, BasketSingle } from 'src/types/basket.type'
+import { AllBasket, BasketResponse, BasketSingle } from 'src/types/basket.type'
 import http from 'src/utils/http'
 
 //Lấy tất cả giỏ hàng
 export const getBaskets = (page: number, size: number) =>
   http.get<BasketResponse>('/basket', { params: { page, size } })
+
+//Lấy tất cả giỏ hàng ko lọc
+export const getAllsBasket = () => http.get<AllBasket>('/basket/getAllBasket')
 
 //Lấy một giỏ hàng
 export const getOneBasket = (basketId: any) => http.get<BasketSingle>(`/basket/${basketId}`)
@@ -40,3 +43,17 @@ export const getFilterBasket = (
   http.get<BasketResponse>('/basket/filter/basket', {
     params: { page, size, name, minPrice, maxPrice, categoryId, status }
   })
+
+export const getBasketByName = (page: number, size: number, name: string | null = null) =>
+  http.get<BasketResponse>('/basket/getBasketByName', {
+    params: { page, size, name } // Đảm bảo name được truyền vào đúng cách
+  })
+
+// Đảm bảo endpoint và dữ liệu trả về đúng
+export const getBasketById = async (basketId: any) => {
+  const response = await fetch(`/api/basket/${basketId}`);  // Đảm bảo endpoint đúng
+  if (!response.ok) {
+    throw new Error('Error fetching product');
+  }
+  return response.json();  // Trả về dữ liệu đúng
+}

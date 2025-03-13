@@ -201,6 +201,7 @@ export default function AdminBasket() {
                   <td className='py-3 px-4'>{basket.name}</td>
                   <td className='py-3 px-4'>{basket.price}₫</td>
                   <td className='py-3 px-4'>{basket.quantity}</td>
+
                   <td className='py-3 px-4'>
                     {basketCategory?.find((category) => category.id === basket.categoryId)?.name || 'Không xác định'}
                   </td>

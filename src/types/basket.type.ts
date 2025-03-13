@@ -41,3 +41,4 @@ export type BasketItem = {
 }
 
 export type BasketSingle = SuccessResponse<BasketItem>
+export type AllBasket = SuccessResponse<BasketItem[]>
