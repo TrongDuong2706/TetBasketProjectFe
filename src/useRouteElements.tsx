@@ -19,6 +19,8 @@ import AddBasketCategory from './pages/Admin/AdminBasketCategory/AddBasketCatego
 import EditBasketCategory from './pages/Admin/AdminBasketCategory/EditBasketCategory'
 import AddBasketShell from './pages/Admin/AdminBasketShell/AddBasketShell'
 import EditBasketShell from './pages/Admin/AdminBasketShell/EditBasketShell'
+import Cart from './pages/Cart/Cart'
+import DetailProduct from './pages/DetailProduct/DetailProduct'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -42,6 +44,19 @@ export default function useRouteElements() {
       )
     },
     {
+      path: '/cart',
+      index: true,
+      element: (
+        <Cart />
+      )
+    },
+    {
+      path: '/product/:basketId',
+      element: (
+        <DetailProduct />
+      )
+    },
+    {
       path: '',
       element: <RejectedRoute />,
       children: [
@@ -52,7 +67,8 @@ export default function useRouteElements() {
         {
           path: '/login',
           element: <Login />
-        }
+        },
+        
       ]
     },
     {
