@@ -14,7 +14,7 @@ export type BasketResponse = SuccessResponse<{
 export interface Basket {
   id: number
   description: String
-  name: String
+  name: string
   price: number
   quantity: number
   categoryId: number

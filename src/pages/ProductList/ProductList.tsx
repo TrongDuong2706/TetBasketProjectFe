@@ -1,30 +1,35 @@
 import { useQuery } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { getFilterAlcohol } from 'src/apis/basket.api'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
+import { useLocation } from 'react-router-dom'
 
 export default function ProductList() {
   const [page, setPage] = useState(1)
   const pageSize = 6
+  const location = useLocation()
+
+  // Lấy giá trị search từ URL
+  const queryParams = new URLSearchParams(location.search)
+  const searchQuery = queryParams.get('search') || null
 
   // Các biến lưu giá trị khi chọn lọc
-  const [tempName, setTempName] = useState<string | null>(null)
   const [tempMinPrice, setTempMinPrice] = useState<number | null>(null)
   const [tempMaxPrice, setTempMaxPrice] = useState<number | null>(null)
   const [tempCategoryId, setTempCategoryId] = useState<number | null>(null)
   const [tempBasketShellId, setTempBasketShellId] = useState<number | null>(null)
   const [tempHasAlcohol, setTempHasAlcohol] = useState<boolean | null>(null)
 
-  // Các biến chính thức dùng để gọi API (chỉ cập nhật khi bấm "Tìm kiếm")
-  const [name, setName] = useState<string | null>(null)
+  // Các biến chính thức dùng để gọi API
+  const [name, setName] = useState<string | null>(searchQuery)
   const [minPrice, setMinPrice] = useState<number | null>(null)
   const [maxPrice, setMaxPrice] = useState<number | null>(null)
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [basketShellId, setBasketShellId] = useState<number | null>(null)
   const [hasAlcohol, setHasAlcohol] = useState<boolean | null>(null)
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['filterAlcohol', page, name, minPrice, maxPrice, categoryId, basketShellId, hasAlcohol],
     queryFn: () => getFilterAlcohol(page, pageSize, name, minPrice, maxPrice, categoryId, 1, basketShellId, hasAlcohol)
   })
@@ -32,7 +37,7 @@ export default function ProductList() {
   const products = data?.data.result.elements || []
 
   const handleSearch = () => {
-    setName(tempName)
+    setName(searchQuery) // Dùng lại giá trị từ thanh tìm kiếm trên header
     setMinPrice(tempMinPrice)
     setMaxPrice(tempMaxPrice)
     setCategoryId(tempCategoryId)
@@ -50,19 +55,34 @@ export default function ProductList() {
       </div>
 
       <div className='p-5 flex flex-col items-center mx-auto max-w-screen-lg'>
+        {/* Hiển thị điều kiện lọc */}
+        {(name || minPrice || maxPrice || categoryId || basketShellId || hasAlcohol) && (
+          <div className='mb-4 p-3 bg-gray-100 border border-gray-300 rounded-md w-full'>
+            <strong>Bạn đang lọc theo:</strong>
+            {name && <span className='ml-2 text-blue-600'>Kết quả tìm kiếm: "{name}"</span>}
+            {minPrice !== null && maxPrice !== null && (
+              <span className='ml-2 text-blue-600'>
+                Giá: {minPrice.toLocaleString()}₫ - {maxPrice ? maxPrice.toLocaleString() : 'trở lên'}₫
+              </span>
+            )}
+            {categoryId && (
+              <span className='ml-2 text-blue-600'>
+                Thể loại giỏ: {categoryId === 1 ? 'Giỏ quà lớn' : 'Giỏ quà nhỏ'}
+              </span>
+            )}
+            {basketShellId && (
+              <span className='ml-2 text-blue-600'>
+                Thể loại vỏ: {basketShellId === 1 ? 'Hộp gỗ' : basketShellId === 2 ? 'Hộp giấy' : 'Hộp thiếc'}
+              </span>
+            )}
+            {hasAlcohol !== null && (
+              <span className='ml-2 text-blue-600'>{hasAlcohol ? 'Có rượu' : 'Không có rượu'}</span>
+            )}
+          </div>
+        )}
+
         {/* Bộ lọc sản phẩm */}
         <div className='mb-5 grid grid-cols-4 gap-4 bg-gray-100 p-4 border border-gray-200 rounded-md shadow-md'>
-          {/* Lọc theo tên sản phẩm */}
-          <div>
-            <label className='block text-sm font-medium text-gray-700'>Tên sản phẩm</label>
-            <input
-              type='text'
-              placeholder='Nhập tên sản phẩm'
-              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              onChange={(e) => setTempName(e.target.value || null)}
-            />
-          </div>
-
           {/* Lọc theo giá */}
           <div>
             <label className='block text-sm font-medium text-gray-700'>Giá</label>
@@ -70,31 +90,8 @@ export default function ProductList() {
               className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
               onChange={(e) => {
                 const value = parseInt(e.target.value, 10)
-                switch (value) {
-                  case 1:
-                    setTempMinPrice(null)
-                    setTempMaxPrice(500000)
-                    break
-                  case 2:
-                    setTempMinPrice(500000)
-                    setTempMaxPrice(1000000)
-                    break
-                  case 3:
-                    setTempMinPrice(1000000)
-                    setTempMaxPrice(2000000)
-                    break
-                  case 4:
-                    setTempMinPrice(2000000)
-                    setTempMaxPrice(3000000)
-                    break
-                  case 5:
-                    setTempMinPrice(3000000)
-                    setTempMaxPrice(null)
-                    break
-                  default:
-                    setTempMinPrice(null)
-                    setTempMaxPrice(null)
-                }
+                setTempMinPrice(value === 1 ? null : value * 500000)
+                setTempMaxPrice(value === 5 ? null : value * 500000 + 500000)
               }}
             >
               <option value=''>Lọc theo giá</option>
@@ -110,12 +107,26 @@ export default function ProductList() {
           <div>
             <label className='block text-sm font-medium text-gray-700'>Thể loại giỏ</label>
             <select
-              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
+              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
               onChange={(e) => setTempCategoryId(parseInt(e.target.value, 10) || null)}
             >
               <option value=''>Lọc theo thể loại giỏ</option>
               <option value='1'>Giỏ quà lớn</option>
               <option value='2'>Giỏ quà nhỏ</option>
+            </select>
+          </div>
+
+          {/* Lọc theo thể loại vỏ */}
+          <div>
+            <label className='block text-sm font-medium text-gray-700'>Thể loại vỏ</label>
+            <select
+              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
+              onChange={(e) => setTempBasketShellId(parseInt(e.target.value, 10) || null)}
+            >
+              <option value=''>Lọc theo thể loại vỏ</option>
+              <option value='1'>Hộp gỗ</option>
+              <option value='2'>Hộp giấy</option>
+              <option value='3'>Hộp thiếc</option>
             </select>
           </div>
 
@@ -132,39 +143,17 @@ export default function ProductList() {
 
         {/* Nút tìm kiếm */}
         <button
-          className='mb-5 bg-indigo-600 text-white px-6 py-2 rounded-md shadow hover:bg-indigo-700 transition-all'
+          className='mb-5 bg-indigo-600 text-white px-6 py-2 rounded-md shadow hover:bg-indigo-700'
           onClick={handleSearch}
         >
           Tìm kiếm
         </button>
 
-        {/* Hiển thị điều kiện lọc */}
-        {(name || minPrice || maxPrice || categoryId || basketShellId || hasAlcohol) && (
-          <div className='mb-4 p-3 bg-gray-100 border border-gray-300 rounded-md'>
-            <strong>Bạn đang lọc theo:</strong>
-            {name && <span className='ml-2'>Tên: "{name}"</span>}
-            {minPrice !== null && maxPrice !== null && (
-              <span className='ml-2'>
-                Giá: {minPrice}₫ - {maxPrice}₫
-              </span>
-            )}
-            {categoryId && (
-              <span className='ml-2'>Thể loại giỏ: {categoryId === 1 ? 'Giỏ quà lớn' : 'Giỏ quà nhỏ'}</span>
-            )}
-            {basketShellId && (
-              <span className='ml-2'>
-                Thể loại vỏ: {basketShellId === 1 ? 'Hộp gỗ' : basketShellId === 2 ? 'Hộp giấy' : 'Hộp thiếc'}
-              </span>
-            )}
-            {hasAlcohol !== null && <span className='ml-2'>{hasAlcohol ? 'Có rượu' : 'Không rượu'}</span>}
-          </div>
-        )}
-
         {/* Danh sách sản phẩm */}
         <div className='mt-5 grid grid-cols-3 gap-4'>
           {isLoading ? (
             <p className='text-gray-500'>Đang tải...</p>
-          ) : products.length > 0 ? (
+          ) : (
             products.map((product) => (
               <div key={product.id} className='border p-4 rounded-md shadow-md'>
                 <img src={product.images[0]?.imageUrl} className='w-full h-40 object-cover mb-4' />
@@ -172,8 +161,6 @@ export default function ProductList() {
                 <p className='text-gray-500'>{product.price.toLocaleString()}₫</p>
               </div>
             ))
-          ) : (
-            <p className='text-gray-500'>Không tìm thấy sản phẩm</p>
           )}
         </div>
       </div>
