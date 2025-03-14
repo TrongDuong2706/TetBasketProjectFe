@@ -24,7 +24,7 @@ export const schema = yup.object({
     .required('Vui lòng nhập lại mật khẩu')
     .min(6, 'Độ dài từ 6 - 160 ký tự')
     .max(160, 'Độ dài từ 6 đến 160 ký tự')
-    .oneOf([yup.ref('password')], 'Nhập lại password không khớp'),
+    .oneOf([yup.ref('password')], 'Password không khớp'),
   lastName: yup
     .string()
     .required('Vui lòng nhập lại tên')
