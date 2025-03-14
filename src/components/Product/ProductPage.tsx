@@ -1,15 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom' // Import useNavigate
-import { getAllsBasket } from 'src/apis/basket.api'
+import { getAllsBasket, getBasketByCategory } from 'src/apis/basket.api'
 
 const ProductPage: React.FC = () => {
   const navigate = useNavigate() // Khởi tạo navigate
+  const [page, setPage] = useState(1) // Page bắt đầu từ 1
+  const pageSize = 5 // Định kích thước trang
 
   // Lấy danh sách BasketShell từ API
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['getAllsBasket'],
-    queryFn: getAllsBasket
+    queryKey: ['getBasketByCategory', page],
+    queryFn: () => getBasketByCategory(page, pageSize)
   })
 
   const baskets = data?.data.result
@@ -30,7 +32,7 @@ const ProductPage: React.FC = () => {
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
         {/* Render các sản phẩm từ danh sách baskets */}
-        {baskets?.map((basket) => (
+        {baskets?.elements.map((basket) => (
           <div
             key={basket.id}
             className='border p-4 bg-white cursor-pointer'

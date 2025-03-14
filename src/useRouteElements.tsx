@@ -21,6 +21,7 @@ import AddBasketShell from './pages/Admin/AdminBasketShell/AddBasketShell'
 import EditBasketShell from './pages/Admin/AdminBasketShell/EditBasketShell'
 import Cart from './pages/Cart/Cart'
 import DetailProduct from './pages/DetailProduct/DetailProduct'
+import ProductList from './pages/ProductList/ProductList'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -48,6 +49,13 @@ export default function useRouteElements() {
       index: true,
       element: (
         <Cart />
+      )
+    },
+    {
+      path: '/productList',
+      index: true,
+      element: (
+        <ProductList />
       )
     },
     {
