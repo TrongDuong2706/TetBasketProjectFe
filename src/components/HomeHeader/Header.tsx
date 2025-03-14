@@ -101,24 +101,24 @@ export default function Header() {
         </div>
         <div className='flex items-center gap-4'>
           <div className='relative flex items-center'>
-        <Heart size={18} />
-        <span className='absolute -top-1 -right-2 bg-red-600 text-xs px-1 rounded-full'>0</span>
+            <Heart size={18} />
+            <span className='absolute -top-1 -right-2 bg-red-600 text-xs px-1 rounded-full'>0</span>
           </div>
           <div
-        className='relative flex items-center cursor-pointer'
-        onClick={() => {
-          navigate('/Cart')
-        }}
+            className='relative flex items-center cursor-pointer'
+            onClick={() => {
+              navigate('/Cart')
+            }}
           >
-        <ShoppingBag size={18} />
-        <span className='ml-1 text-sm'>{cartItems} / 0₫</span>
+            <ShoppingBag size={18} />
+            <span className='ml-1 text-sm'>{cartItems} / 0₫</span>
           </div>
           {/* Add the AddToCart component */}
         </div>
       </div>
 
       <nav className='bg-[#A92D22] w-full pt-2 pb-3 flex justify-center gap-20'>
-        <div className='relative group z-50'>
+        <div className='relative group z-20'>
           <button className='bg-[#D73E29] font-semibold text-sm px-5 py-2 rounded flex items-center gap-1'>
             <Gift size={16} /> DANH MỤC SẢN PHẨM
             <ChevronDown size={16} />
@@ -147,19 +147,34 @@ export default function Header() {
           </div>
         </div>
         <div className='flex justify-center gap-7 text-sm font-semibold'>
-            <a href='#' className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'>
+          <a
+            href='#'
+            className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'
+          >
             <Home size={16} /> TRANG CHỦ
-            </a>
-          <a href='/productList' className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'>
+          </a>
+          <a
+            href='#'
+            className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'
+          >
             <Gift size={16} /> QUÀ TẾT
           </a>
-          <a href='#' className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'>
+          <a
+            href='#'
+            className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'
+          >
             <Info size={16} /> GIỚI THIỆU
           </a>
-          <a href='#' className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'>
+          <a
+            href='#'
+            className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'
+          >
             <Newspaper size={16} /> BLOG
           </a>
-          <a href='#' className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'>
+          <a
+            href='#'
+            className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'
+          >
             <Phone size={16} /> LIÊN HỆ
           </a>
         </div>
