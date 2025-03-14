@@ -9,8 +9,8 @@ const DetailProduct: React.FC = () => {
 
   // Lấy thông tin chi tiết sản phẩm từ API theo ID
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['getBasketById', basketId],  // Đảm bảo sử dụng đúng basketId
-    queryFn: () => getBasketById(basketId)  // Chỉnh sửa API cho đúng
+    queryKey: ['getBasketById', basketId], // Đảm bảo sử dụng đúng basketId
+    queryFn: () => getBasketById(basketId) // Chỉnh sửa API cho đúng
   })
 
   const basket = data?.data.result
@@ -29,14 +29,10 @@ const DetailProduct: React.FC = () => {
 
       {/* Hiển thị hình ảnh sản phẩm */}
       <div className='flex justify-center mb-8'>
-        {basket?.images && basket.images.map((image, index) => (
-          <img
-            key={index}
-            className='w-full h-auto max-w-sm'
-            src={image.imageUrl}
-            alt={basket?.name}
-          />
-        ))}
+        {basket?.images &&
+          basket.images.map((image: any, index: any) => (
+            <img key={index} className='w-full h-auto max-w-sm' src={image.imageUrl} alt={basket?.name} />
+          ))}
       </div>
 
       {/* Chi tiết sản phẩm */}
@@ -44,9 +40,15 @@ const DetailProduct: React.FC = () => {
         <div>
           <h3 className='text-xl font-semibold'>Thông tin chi tiết</h3>
           <ul className='mt-4 text-sm text-gray-700'>
-            <li><strong>Loại sản phẩm:</strong> {basket?.category}</li>
-            <li><strong>Trọng lượng:</strong> {basket?.weight} kg</li>
-            <li><strong>Đơn vị tính:</strong> {basket?.unit}</li>
+            <li>
+              <strong>Loại sản phẩm:</strong> {basket?.category}
+            </li>
+            <li>
+              <strong>Trọng lượng:</strong> {basket?.weight} kg
+            </li>
+            <li>
+              <strong>Đơn vị tính:</strong> {basket?.unit}
+            </li>
             {/* Thêm các thông tin khác nếu có */}
           </ul>
         </div>
@@ -54,9 +56,7 @@ const DetailProduct: React.FC = () => {
         <div>
           <h3 className='text-xl font-semibold'>Mua ngay</h3>
           <div className='mt-4'>
-            <button className='bg-red-500 text-white px-6 py-2 rounded-full w-full'>
-              Thêm vào giỏ hàng
-            </button>
+            <button className='bg-red-500 text-white px-6 py-2 rounded-full w-full'>Thêm vào giỏ hàng</button>
           </div>
         </div>
       </div>
