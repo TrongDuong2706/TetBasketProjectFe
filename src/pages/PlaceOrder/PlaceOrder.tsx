@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "src/components/HomeHeader/Header";
 import Footer from "src/components/Footer/Footer";
+import { FaPhoneAlt } from "react-icons/fa";
 
 import { useState } from "react";
 
@@ -35,6 +36,16 @@ const PlaceOrder: React.FC = () => {
                             <label className="block text-gray-700">Ghi chú đơn hàng (tuỳ chọn)</label>
                             <textarea className="w-full border rounded px-4 py-2" placeholder="Ghi chú cho đơn hàng" rows={4}></textarea>
                         </div>
+                        <div className="mb-4">
+                        <label className="flex items-center text-gray-700">
+                            <i className="fas fa-ticket-alt mr-2"></i>
+                            Sử dụng mã giảm giá
+                        </label>
+                        <div className="flex mt-2">
+                            <input className="flex-1 border rounded-l px-4 py-2" placeholder="Mã ưu đãi" type="text" />
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded-r">Áp dụng</button>
+                        </div>
+                    </div>
                     </div>
                     <div className="border-t pt-4">
                         <div className="flex justify-between text-gray-700 mb-2">
@@ -50,6 +61,7 @@ const PlaceOrder: React.FC = () => {
                             <span>2,280,000 đ</span>
                         </div>
                     </div>
+                    
                     <div className="border-t pt-4 mb-4">
                         <h3 className="text-lg font-semibold mb-2">Trả tiền mặt khi nhận hàng</h3>
                         <p className="text-gray-700">Nhận hàng và trả tiền mặt trực tiếp cho nhân viên giao hàng</p>
@@ -57,6 +69,9 @@ const PlaceOrder: React.FC = () => {
                     <button className="bg-[#b02c24] text-white text-center py-4 rounded-lg w-full">
                         Đặt hàng
                     </button>
+                    <div className="mt-4 flex flex-col items-start space-y-1">
+                    </div>
+    
                 </div>
                 <div className="max-w-2xl bg-white p-6 rounded-lg shadow-md w-full mt-4 md:mt-0 md:ml-4 flex flex-col justify-between">
                     {[{
@@ -88,16 +103,14 @@ const PlaceOrder: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                    <div className="mb-4">
-                        <label className="flex items-center text-gray-700">
-                            <i className="fas fa-ticket-alt mr-2"></i>
-                            Sử dụng mã giảm giá
-                        </label>
-                        <div className="flex mt-2">
-                            <input className="flex-1 border rounded-l px-4 py-2" placeholder="Mã ưu đãi" type="text" />
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded-r">Áp dụng</button>
-                        </div>
-                    </div>
+                    <p className="text-gray-600">Gặp khó khăn trong vấn đề đặt hàng?</p>
+    <div className="flex items-center space-x-2">
+        <FaPhoneAlt className="text-[#b02c24] text-xl" />
+        <p className="text-[#b02c24] text-2xl font-bold">
+            0918 330 360 <span className="text-gray-600 text-base font-normal">Gọi ngay để được hỗ trợ nhanh nhất!</span>
+        </p>
+    </div>
+                    
                 </div>
             </div>
             <Footer/>
