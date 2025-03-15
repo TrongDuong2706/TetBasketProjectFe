@@ -6,87 +6,85 @@ export default function Cart() {
     return (
         <div className='flex flex-col min-h-screen'>
             <Header />
-            <main className='flex-grow container mx-auto p-4'>
-                <div className='flex flex-col lg:flex-row mx-2'>
-                    <div className='lg:w-1/2 lg:shadow-lg p-4 lg:border'>
-                        <h2 className='text-2xl font-bold mb-5 text-center'>Giỏ hàng của bạn</h2>
-                        <ul>
-                            <li className='flex items-center mb-4 border-b pb-4'>
-                                <img src='/images/slide.jpeg' alt='Product 1' className='w-24 h-24 object-cover' />
-                                <div className='ml-4 flex-grow'>
-                                    <h3 className='text-lg font-semibold'>Sản phẩm 1</h3>
-                                    <p className='text-gray-700 mt-2'>Giá: 1,000,000đ</p>
-                                </div>
-                                <input type='number' defaultValue='1' className='border p-1 w-16 text-center' />
-                            </li>
-                            <li className='flex items-center mb-4 border-b pb-4'>
-                                <img src='/images/slide.jpeg' alt='Product 2' className='w-24 h-24 object-cover' />
-                                <div className='ml-4 flex-grow'>
-                                    <h3 className='text-lg font-semibold'>Sản phẩm 2</h3>
-                                    <p className='text-gray-700 mt-2'>Giá: 1,200,000đ</p>
-                                </div>
-                                <input type='number' defaultValue='1' className='border p-1 w-16 text-center' />
-                            </li>
-                        </ul>
-                    </div>
-                    <div className='lg:w-1/2 lg:ml-8 mt-8 lg:mt-0 lg:border lg:pl-8 lg:shadow-lg p-4'>
-                        <h2 className='text-2xl font-bold mb-5 text-center'>Thông tin thanh toán</h2>
-                        <form className='space-y-4'>
-                            <label className='block'>
-                                Họ và tên:
-                                <input type='text' name='name' className='border p-2 w-full mt-2' required />
-                            </label>
-                            <label className='block'>
-                                Số điện thoại:
-                                <input type='text' name='phone' className='border p-2 w-full mt-1' required />
-                            </label>
-                            <label className='block'>
-                                Địa chỉ email:
-                                <input type='email' name='email' className='border p-2 w-full mt-1' required />
-                            </label>
-                            <label className='block'>
-                                Tỉnh/Thành phố:
-                                <select name='city' className='border p-2 w-full mt-1' required>
-                                    <option value=''>Chọn Tỉnh/Thành phố</option>
-                                    <option value='Hồ Chí Minh'>Hồ Chí Minh</option>
-                                    <option value='Hà Nội'>Hà Nội</option>
-                                </select>
-                            </label>
-                            <label className='block'>
-                                Quận/Huyện:
-                                <select name='district' className='border p-2 w-full mt-1' required>
-                                    <option value=''>Chọn Quận/Huyện</option>
-                                </select>
-                            </label>
-                            <label className='block'>
-                                Xã/Phường/Thị trấn:
-                                <select name='ward' className='border p-2 w-full mt-1' required>
-                                    <option value=''>Chọn Xã/Phường/Thị trấn</option>
-                                </select>
-                            </label>
-                            <label className='block'>
-                                Địa chỉ:
-                                <input type='text' name='address' className='border p-2 w-full mt-1' required />
-                            </label>
-                            <div className='flex items-center'>
-                                <input type='radio' name='vat' value='no' className='mr-2 mt-1' defaultChecked />
-                                KHÔNG xuất hoá đơn VAT
-                                <input type='radio' name='vat' value='yes' className='ml-4 mr-2 mt-1' />
-                                Có xuất hoá đơn VAT
-                            </div>
-                            <div className='flex items-center'>
-                                <input type='checkbox' name='differentAddress' className='mr-2 mt-1' />
-                                GIAO HÀNG TỚI ĐỊA CHỈ KHÁC?
-                            </div>
-                            <label className='block'>
-                                Ghi chú đơn hàng:
-                                <textarea name='note' className='border p-2 w-full mt-1'></textarea>
-                            </label>
-                            <button type='submit' className='bg-red-500 text-white p-2 rounded w-full'>Đặt hàng</button>
-                        </form>
-                        <div className='mt-4'>
-                            <h3 className='text-lg font-semibold'>Tổng cộng: 2,200,000đ</h3>
-                        </div>
+            <main className="flex justify-center items-center bg-gray-200 bg-cover bg-center p-6">
+                <div className="bg-white shadow-lg rounded-lg w-full max-w-5xl p-6">
+                    <h2 className="text-2xl font-bold mb-6 text-center">Giỏ hàng</h2>
+
+                    {/* Cart Table */}
+                    <table className="w-full border-collapse border border-gray-300">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                <th className="border p-2">STT</th>
+                                <th className="border p-2">Ảnh đại diện</th>
+                                <th className="border p-2">Tên sản phẩm</th>
+                                <th className="border p-2">Số lượng</th>
+                                <th className="border p-2">Đơn giá</th>
+                                <th className="border p-2">Thành tiền</th>
+                                <th className="border p-2">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {/* Product 1 */}
+                            <tr className="text-center">
+                                <td className="border p-2">1</td>
+                                <td className="border p-2">
+                                    <img src="https://storage.googleapis.com/a1aa/image/nuHv3KgPvRba4fNSDvPdwgWqJB-rBFwNlGmxz_IcXxw.jpg" 
+                                         alt="S1" 
+                                         className="w-32 h-32 object-cover mx-auto"/>
+                                </td>
+                                <td className="border p-2">Hộp quà Tết cao cấp Happybox Phúc Lộc An Khang HPH111</td>
+                                <td className="border p-2">
+                                    <input type="number" defaultValue="2" className="border w-12 text-center" />
+                                </td>
+                                <td className="border p-2">1,190,000</td>
+                                <td className="border p-2">2,380,000</td>
+                                <td className="border p-2">
+                                    <button className="bg-red-500 text-white px-3 py-1 rounded">🗑 Xóa</button>
+                                </td>
+                            </tr>
+
+                            {/* Product 2 */}
+                            <tr className="text-center">
+                                <td className="border p-2">2</td>
+                                <td className="border p-2">
+                                    <img src="https://storage.googleapis.com/a1aa/image/PFk-gzjydnOoCqmJOrHCf3vEQD4X0R_E5pQJMgqKR5I.jpg" 
+                                         alt="S2" 
+                                         className="w-32 h-32 object-cover mx-auto"/>
+                                </td>
+                                <td className="border p-2">Hộp Quà Tết cao cấp Happybox HPH1218</td>
+                                <td className="border p-2">
+                                    <input type="number" defaultValue="5" className="border w-12 text-center" />
+                                </td>
+                                <td className="border p-2">680,000</td>
+                                <td className="border p-2">3,400,000</td>
+                                <td className="border p-2">
+                                    <button className="bg-red-500 text-white px-3 py-1 rounded">🗑 Xóa</button>
+                                </td>
+                            </tr>
+
+                            {/* Product 3 */}
+                            <tr className="text-center">
+                                <td className="border p-2">3</td>
+                                <td className="border p-2">
+                                    <img src="" alt="S3" className="w-32 h-32 object-cover mx-auto"/>
+                                </td>
+                                <td className="border p-2"></td>
+                                <td className="border p-2">
+                                    <input type="number" defaultValue="3" className="border w-12 text-center" />
+                                </td>
+                                <td className="border p-2"></td>
+                                <td className="border p-2"></td>
+                                <td className="border p-2">
+                                    <button className="bg-red-500 text-white px-3 py-1 rounded">🗑 Xóa</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {/* Footer Actions */}
+                    <div className="mt-6 flex justify-between">
+                        <a href="#" className="text-blue-500">← Quay lại trang sản phẩm</a>
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded">Thanh toán</button>
                     </div>
                 </div>
             </main>
