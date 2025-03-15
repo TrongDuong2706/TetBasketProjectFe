@@ -22,6 +22,7 @@ import EditBasketShell from './pages/Admin/AdminBasketShell/EditBasketShell'
 import Cart from './pages/Cart/Cart'
 import DetailProduct from './pages/DetailProduct/DetailProduct'
 import ProductList from './pages/ProductList/ProductList'
+import ProductDetail from './pages/ProductDetails/ProductDetail'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -56,6 +57,13 @@ export default function useRouteElements() {
       index: true,
       element: (
         <ProductList />
+      )
+    },
+    {
+      path: '/productDetails',
+      index: true,
+      element: (
+        <ProductDetail />
       )
     },
     {

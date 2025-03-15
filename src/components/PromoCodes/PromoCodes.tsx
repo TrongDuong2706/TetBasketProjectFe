@@ -4,7 +4,7 @@ import React from 'react';
 const PromoCodes: React.FC = () => {
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code);
-    // You could add a notification here
+    alert(`Đã sao chép mã: ${code}`);
   };
 
   const promoData = [
