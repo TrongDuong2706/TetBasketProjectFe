@@ -22,6 +22,7 @@ import EditBasketShell from './pages/Admin/AdminBasketShell/EditBasketShell'
 import Cart from './pages/Cart/Cart'
 import DetailProduct from './pages/DetailProduct/DetailProduct'
 import ProductList from './pages/ProductList/ProductList'
+import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -47,22 +48,22 @@ export default function useRouteElements() {
     {
       path: '/cart',
       index: true,
-      element: (
-        <Cart />
-      )
+      element: <Cart />
+    },
+    {
+      path: '/place-order',
+      index: true,
+      element: <PlaceOrder />
     },
     {
       path: '/productList',
       index: true,
-      element: (
-        <ProductList />
-      )
+      element: <ProductList />
     },
+
     {
       path: '/product/:basketId',
-      element: (
-        <DetailProduct />
-      )
+      element: <DetailProduct />
     },
     {
       path: '',
@@ -75,8 +76,7 @@ export default function useRouteElements() {
         {
           path: '/login',
           element: <Login />
-        },
-        
+        }
       ]
     },
     {
