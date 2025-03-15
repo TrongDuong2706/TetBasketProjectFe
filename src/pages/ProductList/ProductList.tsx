@@ -1,27 +1,25 @@
 import { useQuery } from '@tanstack/react-query'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { getFilterAlcohol } from 'src/apis/basket.api'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
 import { useLocation } from 'react-router-dom'
+import { getAllBasketShell, getBasketCategory } from 'src/apis/category.api'
 
 export default function ProductList() {
   const [page, setPage] = useState(1)
   const pageSize = 6
   const location = useLocation()
 
-  // Lấy giá trị search từ URL
   const queryParams = new URLSearchParams(location.search)
   const searchQuery = queryParams.get('search') || null
 
-  // Các biến lưu giá trị khi chọn lọc
   const [tempMinPrice, setTempMinPrice] = useState<number | null>(null)
   const [tempMaxPrice, setTempMaxPrice] = useState<number | null>(null)
   const [tempCategoryId, setTempCategoryId] = useState<number | null>(null)
   const [tempBasketShellId, setTempBasketShellId] = useState<number | null>(null)
   const [tempHasAlcohol, setTempHasAlcohol] = useState<boolean | null>(null)
 
-  // Các biến chính thức dùng để gọi API
   const [name, setName] = useState<string | null>(searchQuery)
   const [minPrice, setMinPrice] = useState<number | null>(null)
   const [maxPrice, setMaxPrice] = useState<number | null>(null)
@@ -35,9 +33,52 @@ export default function ProductList() {
   })
 
   const products = data?.data.result.elements || []
+  const pagination = data?.data.result
+
+  const { data: categoryData } = useQuery({
+    queryKey: ['basketscategory'],
+    queryFn: getBasketCategory
+  })
+  const basketCategory = categoryData?.data.result || []
+
+  const { data: basketData } = useQuery({
+    queryKey: ['basketshell'],
+    queryFn: getAllBasketShell
+  })
+  const basketShells = basketData?.data.result || []
+
+  const handlePriceFilter = (priceRange: string) => {
+    const priceValue = parseInt(priceRange, 10)
+    switch (priceValue) {
+      case 1:
+        setTempMinPrice(0)
+        setTempMaxPrice(500000)
+        break
+      case 2:
+        setTempMinPrice(500000)
+        setTempMaxPrice(1000000)
+        break
+      case 3:
+        setTempMinPrice(1000000)
+        setTempMaxPrice(2000000)
+        break
+      case 4:
+        setTempMinPrice(2000000)
+        setTempMaxPrice(3000000)
+        break
+      case 5:
+        setTempMinPrice(3000000)
+        setTempMaxPrice(0)
+        break
+      default:
+        setTempMinPrice(null)
+        setTempMaxPrice(null)
+        break
+    }
+  }
 
   const handleSearch = () => {
-    setName(searchQuery) // Dùng lại giá trị từ thanh tìm kiếm trên header
+    setName(searchQuery)
     setMinPrice(tempMinPrice)
     setMaxPrice(tempMaxPrice)
     setCategoryId(tempCategoryId)
@@ -55,7 +96,6 @@ export default function ProductList() {
       </div>
 
       <div className='p-5 flex flex-col items-center mx-auto max-w-screen-lg'>
-        {/* Hiển thị điều kiện lọc */}
         {(name || minPrice || maxPrice || categoryId || basketShellId || hasAlcohol) && (
           <div className='mb-4 p-3 bg-gray-100 border border-gray-300 rounded-md w-full'>
             <strong>Bạn đang lọc theo:</strong>
@@ -67,12 +107,12 @@ export default function ProductList() {
             )}
             {categoryId && (
               <span className='ml-2 text-blue-600'>
-                Thể loại giỏ: {categoryId === 1 ? 'Giỏ quà lớn' : 'Giỏ quà nhỏ'}
+                Thể loại giỏ: {basketCategory.find((cat) => cat.id === categoryId)?.name || 'Không xác định'}
               </span>
             )}
             {basketShellId && (
               <span className='ml-2 text-blue-600'>
-                Thể loại vỏ: {basketShellId === 1 ? 'Hộp gỗ' : basketShellId === 2 ? 'Hộp giấy' : 'Hộp thiếc'}
+                Thể loại vỏ: {basketShells.find((shell) => shell.id === basketShellId)?.name || 'Không xác định'}
               </span>
             )}
             {hasAlcohol !== null && (
@@ -81,18 +121,12 @@ export default function ProductList() {
           </div>
         )}
 
-        {/* Bộ lọc sản phẩm */}
         <div className='mb-5 grid grid-cols-4 gap-4 bg-gray-100 p-4 border border-gray-200 rounded-md shadow-md'>
-          {/* Lọc theo giá */}
           <div>
             <label className='block text-sm font-medium text-gray-700'>Giá</label>
             <select
-              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              onChange={(e) => {
-                const value = parseInt(e.target.value, 10)
-                setTempMinPrice(value === 1 ? null : value * 500000)
-                setTempMaxPrice(value === 5 ? null : value * 500000 + 500000)
-              }}
+              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
+              onChange={(e) => handlePriceFilter(e.target.value)}
             >
               <option value=''>Lọc theo giá</option>
               <option value='1'>Nhỏ hơn 500k</option>
@@ -103,7 +137,6 @@ export default function ProductList() {
             </select>
           </div>
 
-          {/* Lọc theo thể loại giỏ */}
           <div>
             <label className='block text-sm font-medium text-gray-700'>Thể loại giỏ</label>
             <select
@@ -111,12 +144,14 @@ export default function ProductList() {
               onChange={(e) => setTempCategoryId(parseInt(e.target.value, 10) || null)}
             >
               <option value=''>Lọc theo thể loại giỏ</option>
-              <option value='1'>Giỏ quà lớn</option>
-              <option value='2'>Giỏ quà nhỏ</option>
+              {basketCategory.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
             </select>
           </div>
 
-          {/* Lọc theo thể loại vỏ */}
           <div>
             <label className='block text-sm font-medium text-gray-700'>Thể loại vỏ</label>
             <select
@@ -124,24 +159,28 @@ export default function ProductList() {
               onChange={(e) => setTempBasketShellId(parseInt(e.target.value, 10) || null)}
             >
               <option value=''>Lọc theo thể loại vỏ</option>
-              <option value='1'>Hộp gỗ</option>
-              <option value='2'>Hộp giấy</option>
-              <option value='3'>Hộp thiếc</option>
+              {basketShells.map((shell) => (
+                <option key={shell.id} value={shell.id}>
+                  {shell.name}
+                </option>
+              ))}
             </select>
           </div>
-
-          {/* Lọc theo rượu */}
-          <div className='flex items-center mt-6'>
-            <input
-              type='checkbox'
-              className='rounded border-gray-300 focus:ring-indigo-500'
-              onChange={(e) => setTempHasAlcohol(e.target.checked)}
-            />
-            <span className='ml-2 text-lg'>Có rượu</span>
+          <div>
+            <label className='block text-sm font-medium text-gray-700'>Có rượu hay không</label>
+            <select
+              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
+              onChange={(e) =>
+                setTempHasAlcohol(e.target.value === 'true' ? true : e.target.value === 'false' ? false : null)
+              }
+            >
+              <option value=''>Tất cả</option>
+              <option value='true'>Có rượu</option>
+              <option value='false'>Không có rượu</option>
+            </select>
           </div>
         </div>
 
-        {/* Nút tìm kiếm */}
         <button
           className='mb-5 bg-indigo-600 text-white px-6 py-2 rounded-md shadow hover:bg-indigo-700'
           onClick={handleSearch}
@@ -149,7 +188,6 @@ export default function ProductList() {
           Tìm kiếm
         </button>
 
-        {/* Danh sách sản phẩm */}
         <div className='mt-5 grid grid-cols-3 gap-4'>
           {isLoading ? (
             <p className='text-gray-500'>Đang tải...</p>
@@ -163,7 +201,43 @@ export default function ProductList() {
             ))
           )}
         </div>
+        {/* Phân trang */}
+        {pagination && (
+          <div className='flex justify-center items-center mt-4'>
+            <div className='flex gap-2'>
+              <button
+                className={`px-4 py-2 border rounded-md transition ${pagination.hasPreviousPage ? 'hover:bg-gray-200' : 'opacity-50 cursor-not-allowed'}`}
+                disabled={!pagination.hasPreviousPage}
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              >
+                &laquo;
+              </button>
+
+              {[...Array(pagination.totalPages)].map((_, index) => {
+                const pageNumber = index + 1
+                return (
+                  <button
+                    key={pageNumber}
+                    className={`px-4 py-2 border rounded-md transition ${page === pageNumber ? 'bg-blue-500 text-white' : 'hover:bg-gray-200'}`}
+                    onClick={() => setPage(pageNumber)}
+                  >
+                    {pageNumber}
+                  </button>
+                )
+              })}
+
+              <button
+                className={`px-4 py-2 border rounded-md transition ${pagination.hasNextPage ? 'hover:bg-gray-200' : 'opacity-50 cursor-not-allowed'}`}
+                disabled={!pagination.hasNextPage}
+                onClick={() => setPage((prev) => Math.min(prev + 1, pagination.totalPages))}
+              >
+                &raquo;
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
       <Footer />
     </>
   )
