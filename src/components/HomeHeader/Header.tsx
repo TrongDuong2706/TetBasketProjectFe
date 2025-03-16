@@ -154,7 +154,7 @@ export default function Header() {
             <Home size={16} /> TRANG CHỦ
           </a>
           <a
-            href='#'
+            href='/productList'
             className='flex items-center gap-1 text-yellow-100 transition-transform transform hover:scale-110'
           >
             <Gift size={16} /> QUÀ TẾT
