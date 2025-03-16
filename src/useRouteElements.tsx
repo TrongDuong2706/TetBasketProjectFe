@@ -20,7 +20,6 @@ import EditBasketCategory from './pages/Admin/AdminBasketCategory/EditBasketCate
 import AddBasketShell from './pages/Admin/AdminBasketShell/AddBasketShell'
 import EditBasketShell from './pages/Admin/AdminBasketShell/EditBasketShell'
 import Cart from './pages/Cart/Cart'
-import DetailProduct from './pages/DetailProduct/DetailProduct'
 import ProductList from './pages/ProductList/ProductList'
 import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
 import ProductDetail from './pages/ProductDetails/ProductDetail'
@@ -63,13 +62,9 @@ export default function useRouteElements() {
     },
 
     {
-      path: '/productDetails',
+      path: '/product/:basketId',
       index: true,
       element: <ProductDetail />
-    },
-    {
-      path: '/product/:basketId',
-      element: <DetailProduct />
     },
     {
       path: '',

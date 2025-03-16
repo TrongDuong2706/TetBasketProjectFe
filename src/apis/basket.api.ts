@@ -19,6 +19,12 @@ export const createBasket = (body: FormData) =>
     }
   })
 
+//Lấy tất cả related basket
+export const getAllRelatedBasket = (page: number, size: number, categoryId: number | null = null) =>
+  http.get<BasketResponse>('/basket/getAllBasketRelated', {
+    params: { page, size, categoryId }
+  })
+
 //update giỏ hàng
 export const updateBasket = (basketId: any, body: FormData) =>
   http.put(`/basket/${basketId}`, body, {
