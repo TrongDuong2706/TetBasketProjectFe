@@ -107,7 +107,7 @@ export default function ProductDetail() {
     }
   ]
 
-  const navigatePromo = (direction) => {
+  const navigatePromo = (direction: any) => {
     if (direction === 'prev') {
       setCurrentPromoIndex((prevIndex) => (prevIndex === 0 ? promoData.length - 1 : prevIndex - 1))
     } else {
@@ -115,27 +115,25 @@ export default function ProductDetail() {
     }
   }
 
-  const copyCode = (code) => {
+  const copyCode = (code: any) => {
     navigator.clipboard.writeText(code)
     alert(`Mã ${code} đã được sao chép!`)
   }
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = (e: any) => {
     e.preventDefault()
     const currentDate = new Date().toLocaleDateString('vi-VN')
     const newCommentEntry = {
       id: comments.length + 1,
       user: newComment.name,
-      rating: parseInt(newComment.rating),
       comment: newComment.comment,
       date: currentDate
     }
-    setComments([...comments, newCommentEntry])
     setNewComment({ name: '', rating: 5, comment: '', date: currentDate })
     setShowForm(false) // Hide form after submission
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target
     setNewComment((prev) => ({ ...prev, [name]: value }))
   }
@@ -195,15 +193,7 @@ export default function ProductDetail() {
 
               {/* Rating and Sold */}
               <div className='flex items-center gap-2 mt-2'>
-                <div className='flex text-yellow-400'>
-                  {Array(Math.floor(product.rating))
-                    .fill()
-                    .map((_, index) => (
-                      <svg key={index} className='w-5 h-5 fill-current' viewBox='0 0 20 20'>
-                        <path d='M10 15l-5.5 3 1-5.5L2 7.5l5.5-.5L10 2l2.5 5 5.5.5-3.5 4.5 1 5.5z' />
-                      </svg>
-                    ))}
-                </div>
+                <div className='flex text-yellow-400'></div>
                 <span className='text-gray-600'>
                   {product.rating} ({product.reviews} đánh giá)
                 </span>
@@ -387,15 +377,7 @@ export default function ProductDetail() {
                   <div key={comment.id} className='mb-4 p-4 border rounded-lg'>
                     <div className='flex items-center gap-2'>
                       <span className='font-semibold'>{comment.user}</span>
-                      <div className='flex text-yellow-400'>
-                        {Array(Math.floor(comment.rating))
-                          .fill()
-                          .map((_, index) => (
-                            <svg key={index} className='w-5 h-5 fill-current' viewBox='0 0 20 20'>
-                              <path d='M10 15l-5.5 3 1-5.5L2 7.5l5.5-.5L10 2l2.5 5 5.5.5-3.5 4.5 1 5.5z' />
-                            </svg>
-                          ))}
-                      </div>
+                      <div className='flex text-yellow-400'></div>
                     </div>
                     <p className='text-gray-600 mt-2'>{comment.comment}</p>
                     <p className='text-gray-500 text-sm mt-1'>{comment.date}</p>
@@ -447,7 +429,6 @@ export default function ProductDetail() {
                     value={newComment.comment}
                     onChange={handleInputChange}
                     className='w-full p-2 border rounded-lg'
-                    rows='4'
                     required
                   />
                 </div>
