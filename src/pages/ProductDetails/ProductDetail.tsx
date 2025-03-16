@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Gift, Package, PhoneCall, ShieldCheck, ShoppingCart, Truck } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { getAllRelatedBasket, getOneBasket } from 'src/apis/basket.api'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
@@ -14,6 +14,7 @@ import { Card, CardContent } from 'src/components/ui/card'
 export default function ProductDetail() {
   const [currentPromoIndex, setCurrentPromoIndex] = useState(0)
   const [showForm, setShowForm] = useState(false)
+  const [quantity, setQuantity] = useState(1)
 
   const [page, setPage] = useState(1) // Page bắt đầu từ 1
   const size = 3 // Định kích thước trang
@@ -137,6 +138,22 @@ export default function ProductDetail() {
                 {basket?.itemNames.map((item, index) => <li key={index}>{item}</li>)}
               </ul>
               <div>Miêu tả: {basket?.description}</div>
+              <div className='mt-4 flex items-center gap-2'>
+                <span className='text-gray-700 font-medium'>Số lượng:</span>
+                <button
+                  onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
+                  className='bg-gray-200 px-3 py-1 rounded-md text-gray-700 hover:bg-gray-300'
+                >
+                  -
+                </button>
+                <span className='px-4 py-1 border rounded-md'>{quantity}</span>
+                <button
+                  onClick={() => setQuantity((prev) => prev + 1)}
+                  className='bg-gray-200 px-3 py-1 rounded-md text-gray-700 hover:bg-gray-300'
+                >
+                  +
+                </button>
+              </div>
 
               {/* Discount Banners */}
               <div className='mt-4'>
@@ -213,6 +230,12 @@ export default function ProductDetail() {
                   <span className='text-white font-bold'>0912691343 (Zalo)</span>
                 </div>
                 <div className='flex-1 flex justify-center w-[95%] bg-orange-500 gap-3 items-center px-4 py-3 rounded-full border border-gray-300'>
+                  <span className='text-white flex gap-3'>
+                    <ShoppingCart />
+                    Thêm vào giỏ hàng
+                  </span>
+                </div>
+                <div className='flex-1 flex justify-center w-[95%] bg-teal-500 gap-3 items-center px-4 py-3 rounded-full border border-gray-300'>
                   <span className='text-white'>ĐẶT MUA GIAO TẬN NƠI (THANH TOÁN KHI NHẬN HÀNG)</span>
                 </div>
               </div>
@@ -227,16 +250,18 @@ export default function ProductDetail() {
             <h2 className='text-xl font-bold text-gray-800'>Sản Phẩm Liên Quan</h2>
             <div className='mt-4 grid grid-cols-1 md:grid-cols-2 gap-4'>
               {basketCategoryRelated?.map((product) => (
-                <div key={product.id} className='border rounded-lg p-4'>
-                  <img
-                    src={product.images[0].imageUrl}
-                    alt={product.name}
-                    className='w-full h-32 object-cover rounded-lg'
-                  />
-                  <h3 className='text-lg font-semibold mt-2'>{product.name}</h3>
-                  <p className='text-red-500 font-bold mt-1'>{product.price}</p>
-                  <button className='mt-2 bg-red-500 text-white px-4 py-2 rounded-full'>Xem Chi Tiết</button>
-                </div>
+                <Link to={`/product/${product.id}`}>
+                  <div key={product.id} className='border rounded-lg p-4'>
+                    <img
+                      src={product.images[0].imageUrl}
+                      alt={product.name}
+                      className='w-full h-32 object-cover rounded-lg'
+                    />
+                    <h3 className='text-lg font-semibold mt-2'>{product.name}</h3>
+                    <p className='text-red-500 font-bold mt-1'>{product.price}</p>
+                    <button className='mt-2 bg-red-500 text-white px-4 py-2 rounded-full'>Xem Chi Tiết</button>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

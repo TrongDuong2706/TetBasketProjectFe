@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { getFilterAlcohol } from 'src/apis/basket.api'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { getAllBasketShell, getBasketCategory } from 'src/apis/category.api'
 
 export default function ProductList() {
@@ -83,9 +83,11 @@ export default function ProductList() {
     setMaxPrice(tempMaxPrice)
     setCategoryId(tempCategoryId)
     setBasketShellId(tempBasketShellId)
-    setHasAlcohol(tempHasAlcohol)
+    setHasAlcohol(tempHasAlcohol !== null ? tempHasAlcohol : null)
     setPage(1)
   }
+
+  console.log('Sending hasAlcohol:', hasAlcohol)
 
   return (
     <>
@@ -193,11 +195,13 @@ export default function ProductList() {
             <p className='text-gray-500'>Đang tải...</p>
           ) : (
             products.map((product) => (
-              <div key={product.id} className='border p-4 rounded-md shadow-md'>
-                <img src={product.images[0]?.imageUrl} className='w-full h-40 object-cover mb-4' />
-                <h3 className='text-lg font-semibold'>{product.name}</h3>
-                <p className='text-gray-500'>{product.price.toLocaleString()}₫</p>
-              </div>
+              <Link to={`/product/${product.id}`}>
+                <div key={product.id} className='border p-4 rounded-md shadow-md'>
+                  <img src={product.images[0]?.imageUrl} className='w-full h-40 object-cover mb-4' />
+                  <h3 className='text-lg font-semibold'>{product.name}</h3>
+                  <p className='text-gray-500'>{product.price.toLocaleString()}₫</p>
+                </div>
+              </Link>
             ))
           )}
         </div>

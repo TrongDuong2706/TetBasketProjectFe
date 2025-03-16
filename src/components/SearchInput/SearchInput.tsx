@@ -22,7 +22,7 @@ export default function SearchInput() {
 
   const handleSearchSubmit = () => {
     if (query.trim() !== '') {
-      navigate(`/productlist?search=${encodeURIComponent(query)}`)
+      window.location.href = `/productlist?search=${encodeURIComponent(query)}` // Chuyển trang và reload lại
       setShowSuggestions(false) // Ẩn danh sách gợi ý khi tìm kiếm
     }
   }
