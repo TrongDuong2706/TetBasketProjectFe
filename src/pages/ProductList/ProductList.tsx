@@ -8,7 +8,7 @@ import { getAllBasketShell, getBasketCategory } from 'src/apis/category.api'
 
 export default function ProductList() {
   const [page, setPage] = useState(1)
-  const pageSize = 6
+  const pageSize = 8
   const location = useLocation()
 
   const queryParams = new URLSearchParams(location.search)
@@ -122,87 +122,92 @@ export default function ProductList() {
             )}
           </div>
         )}
+        <div className='w-full flex justify-between gap-4'>
+          <div className='mb-5 w-full grid grid-cols-4 gap-4 bg-gray-100 p-4 border border-gray-200 rounded-md shadow-md'>
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>Giá</label>
+              <select
+                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
+                onChange={(e) => handlePriceFilter(e.target.value)}
+              >
+                <option value=''>Lọc theo giá</option>
+                <option value='1'>Nhỏ hơn 500k</option>
+                <option value='2'>500k - 1 triệu</option>
+                <option value='3'>1 triệu - 2 triệu</option>
+                <option value='4'>2 triệu - 3 triệu</option>
+                <option value='5'>Lớn hơn 3 triệu</option>
+              </select>
+            </div>
 
-        <div className='mb-5 grid grid-cols-4 gap-4 bg-gray-100 p-4 border border-gray-200 rounded-md shadow-md'>
-          <div>
-            <label className='block text-sm font-medium text-gray-700'>Giá</label>
-            <select
-              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
-              onChange={(e) => handlePriceFilter(e.target.value)}
-            >
-              <option value=''>Lọc theo giá</option>
-              <option value='1'>Nhỏ hơn 500k</option>
-              <option value='2'>500k - 1 triệu</option>
-              <option value='3'>1 triệu - 2 triệu</option>
-              <option value='4'>2 triệu - 3 triệu</option>
-              <option value='5'>Lớn hơn 3 triệu</option>
-            </select>
-          </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>Thể loại giỏ</label>
+              <select
+                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
+                onChange={(e) => setTempCategoryId(parseInt(e.target.value, 10) || null)}
+              >
+                <option value=''>Lọc theo thể loại giỏ</option>
+                {basketCategory.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div>
-            <label className='block text-sm font-medium text-gray-700'>Thể loại giỏ</label>
-            <select
-              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
-              onChange={(e) => setTempCategoryId(parseInt(e.target.value, 10) || null)}
-            >
-              <option value=''>Lọc theo thể loại giỏ</option>
-              {basketCategory.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>Thể loại vỏ</label>
+              <select
+                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
+                onChange={(e) => setTempBasketShellId(parseInt(e.target.value, 10) || null)}
+              >
+                <option value=''>Lọc theo thể loại vỏ</option>
+                {basketShells.map((shell) => (
+                  <option key={shell.id} value={shell.id}>
+                    {shell.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>Có rượu hay không</label>
+              <select
+                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
+                onChange={(e) =>
+                  setTempHasAlcohol(e.target.value === 'true' ? true : e.target.value === 'false' ? false : null)
+                }
+              >
+                <option value=''>Tất cả</option>
+                <option value='true'>Có rượu</option>
+                <option value='false'>Không có rượu</option>
+              </select>
+            </div>
           </div>
-
-          <div>
-            <label className='block text-sm font-medium text-gray-700'>Thể loại vỏ</label>
-            <select
-              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
-              onChange={(e) => setTempBasketShellId(parseInt(e.target.value, 10) || null)}
-            >
-              <option value=''>Lọc theo thể loại vỏ</option>
-              {basketShells.map((shell) => (
-                <option key={shell.id} value={shell.id}>
-                  {shell.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className='block text-sm font-medium text-gray-700'>Có rượu hay không</label>
-            <select
-              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
-              onChange={(e) =>
-                setTempHasAlcohol(e.target.value === 'true' ? true : e.target.value === 'false' ? false : null)
-              }
-            >
-              <option value=''>Tất cả</option>
-              <option value='true'>Có rượu</option>
-              <option value='false'>Không có rượu</option>
-            </select>
-          </div>
+          <button
+            className='mb-5 bg-indigo-600 text-white px-6 py-2 rounded-md shadow hover:bg-indigo-700'
+            onClick={handleSearch}
+          >
+            Lọc
+          </button>
         </div>
 
-        <button
-          className='mb-5 bg-indigo-600 text-white px-6 py-2 rounded-md shadow hover:bg-indigo-700'
-          onClick={handleSearch}
-        >
-          Tìm kiếm
-        </button>
-
-        <div className='mt-5 grid grid-cols-3 gap-4'>
+        <div className='mt-5 grid grid-cols-4 gap-4'>
           {isLoading ? (
             <p className='text-gray-500'>Đang tải...</p>
-          ) : (
+          ) : products.length > 0 ? ( // ✅ Check if there are products after filtering
             products.map((product) => (
-              <Link to={`/product/${product.id}`}>
-                <div key={product.id} className='border p-4 rounded-md shadow-md'>
-                  <img src={product.images[0]?.imageUrl} className='w-full h-40 object-cover mb-4' />
+              <Link to={`/product/${product.id}`} key={product.id}>
+                <div className='border p-4 rounded-md shadow-md'>
+                  <img src={product.images[0]?.imageUrl} className='w-full h-60 object-cover mb-4' />
                   <h3 className='text-lg font-semibold'>{product.name}</h3>
                   <p className='text-gray-500'>{product.price.toLocaleString()}₫</p>
                 </div>
               </Link>
             ))
+          ) : (
+            // 🚨 Display message when no products match the filters
+            <p className='text-black text-center text-3xl col-span-4 font-semibold'>
+              Không có sản phẩm nào phù hợp với tiêu chí
+            </p>
           )}
         </div>
         {/* Phân trang */}

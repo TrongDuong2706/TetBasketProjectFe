@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 export default function SearchInput() {
   const [query, setQuery] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [noResults, setNoResults] = useState(false) // Track when no results are found
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const pageSize = 5
@@ -15,15 +16,27 @@ export default function SearchInput() {
   const { data, isLoading } = useQuery({
     queryKey: ['getBasketByName', page, query],
     queryFn: () => getBasketByName(page, pageSize, query || ''),
-    enabled: !!query
+    enabled: !!query,
+    onSuccess: (data) => {
+      if (!data?.data.result.elements.length) {
+        setNoResults(true)
+      } else {
+        setNoResults(false)
+      }
+    }
   })
 
   const baskets = data?.data.result.elements.slice(0, 5) || []
 
   const handleSearchSubmit = () => {
     if (query.trim() !== '') {
-      window.location.href = `/productlist?search=${encodeURIComponent(query)}` // Chuyển trang và reload lại
-      setShowSuggestions(false) // Ẩn danh sách gợi ý khi tìm kiếm
+      if (baskets.length === 0) {
+        setNoResults(true) // Show "No results found" message
+      } else {
+        window.location.href = `/productlist?search=${encodeURIComponent(query)}` // Navigate and reload
+        setShowSuggestions(false) // Hide suggestions after searching
+        setNoResults(false) // Reset no-results state
+      }
     }
   }
 
@@ -38,10 +51,15 @@ export default function SearchInput() {
           value={query}
           onChange={(e) => {
             setQuery(e.target.value)
-            setShowSuggestions(true) // Hiển thị gợi ý khi nhập dữ liệu
+            setShowSuggestions(true) // Show suggestions when typing
+            setNoResults(false) // Reset no-results state when input changes
           }}
-          onFocus={() => setShowSuggestions(true)} // Hiển thị gợi ý khi nhấn vào input
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} // Trì hoãn ẩn để tránh mất sự kiện click
+          onFocus={() => setShowSuggestions(true)} // Show suggestions when clicking input
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearchSubmit()
+            }
+          }}
         />
         <button
           className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500'
@@ -51,7 +69,7 @@ export default function SearchInput() {
         </button>
       </div>
 
-      {/* Danh sách gợi ý sản phẩm */}
+      {/* Suggestion List */}
       {query && showSuggestions && baskets.length > 0 && (
         <div className='absolute w-full bg-white border border-gray-300 rounded shadow-lg mt-2 z-50'>
           {isLoading ? (
@@ -63,7 +81,7 @@ export default function SearchInput() {
                 className='flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-all'
                 onMouseDown={() => {
                   navigate(`/product/${product.id}`)
-                  setShowSuggestions(false) // Ẩn danh sách khi chọn sản phẩm
+                  setShowSuggestions(false) // Hide suggestions after clicking
                 }}
               >
                 <img src={product.images[0]?.imageUrl} className='w-12 h-12 object-cover rounded mr-3 border' />
@@ -74,6 +92,13 @@ export default function SearchInput() {
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {/* No Results Message */}
+      {noResults && query && (
+        <div className='text-white text-sm mt-2'>
+          Không tìm thấy sản phẩm nào phù hợp.
         </div>
       )}
     </div>
