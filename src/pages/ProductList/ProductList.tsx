@@ -190,21 +190,41 @@ export default function ProductList() {
           </button>
         </div>
 
-        <div className='mt-5 grid grid-cols-4 gap-4'>
+        <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {isLoading ? (
-            <p className='text-gray-500'>Đang tải...</p>
-          ) : products.length > 0 ? ( // ✅ Check if there are products after filtering
+            <p className='text-gray-500 text-center'>Đang tải...</p>
+          ) : products.length > 0 ? (
             products.map((product) => (
               <Link to={`/product/${product.id}`} key={product.id}>
-                <div className='border p-4 rounded-md shadow-md'>
-                  <img src={product.images[0]?.imageUrl} className='w-full h-60 object-cover mb-4' />
-                  <h3 className='text-lg font-semibold'>{product.name}</h3>
-                  <p className='text-gray-500'>{product.price.toLocaleString()}₫</p>
+                <div className='p-4 cursor-pointer relative'>
+                  {/* Sale Label */}
+                  <div className='absolute top-10 left-4 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded'>
+                    SALE
+                  </div>
+
+                  {/* Product Image */}
+                  {product.images && product.images[0] && (
+                    <img
+                      className='w-full h-auto rounded-lg'
+                      height='300'
+                      src={product.images[0].imageUrl}
+                      width='300'
+                      alt={product.name}
+                    />
+                  )}
+
+                  {/* Product Name */}
+                  <p className='mt-4 text-lg text-center font-greatvibes underline'>{product.name}</p>
+
+                  {/* Prices */}
+                  <div className='text-center mt-2 flex gap-1 items-center justify-center'>
+                    <p className='text-gray-500 text-lg line-through'>{product.price + 500000} đ</p>
+                    <p className='text-red-500 text-lg font-bold'>{product.price.toLocaleString()} đ</p>
+                  </div>
                 </div>
               </Link>
             ))
           ) : (
-            // 🚨 Display message when no products match the filters
             <p className='text-black text-center text-3xl col-span-4 font-semibold'>
               Không có sản phẩm nào phù hợp với tiêu chí
             </p>

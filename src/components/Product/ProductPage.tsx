@@ -55,9 +55,9 @@ const ProductPage: React.FC = () => {
             <p className='mt-4 text-lg text-center font-greatvibes underline'>{basket.name}</p>
 
             {/* Prices */}
-            <div className='text-center mt-2 flex gap-2 items-center '>
-              <p className='text-gray-500 line-through'>{basket.price + 500000} đ</p>
-              <p className='text-red-500 font-bold'>{basket.price} đ</p>
+            <div className='text-center mt-2 flex gap-1 items-center '>
+              <p className='text-gray-500 text-xl line-through'>{basket.price + 500000} đ</p>
+              <p className='text-red-500 text-xl font-bold'>{basket.price.toLocaleString()} đ</p>
             </div>
           </div>
         ))}
