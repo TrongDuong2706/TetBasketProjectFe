@@ -190,39 +190,58 @@ export default function ProductList() {
           </button>
         </div>
 
-        <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+        <div className='mt-5 mb-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {isLoading ? (
             <p className='text-gray-500 text-center'>Đang tải...</p>
           ) : products.length > 0 ? (
             products.map((product) => (
-              <Link to={`/product/${product.id}`} key={product.id}>
-                <div className='p-4 cursor-pointer relative'>
-                  {/* Sale Label */}
-                  <div className='absolute top-10 left-4 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded'>
-                    SALE
-                  </div>
+              <div key={product.id} className='p-4 cursor-pointer relative group'>
+                {/* Sale Label */}
+                <div className='absolute top-10 left-4 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded'>
+                  SALE
+                </div>
 
-                  {/* Product Image */}
-                  {product.images && product.images[0] && (
+                {/* Product Image */}
+                {product.images && product.images[0] && (
+                  <Link to={`/product/${product.id}`}>
                     <img
-                      className='w-full h-auto rounded-lg'
+                      className='w-full h-[75%] rounded-lg'
                       height='300'
                       src={product.images[0].imageUrl}
                       width='300'
                       alt={product.name}
                     />
-                  )}
+                  </Link>
+                )}
 
-                  {/* Product Name */}
+                {/* Product Name - Always visible */}
+                <Link to={`/product/${product.id}`}>
                   <p className='mt-4 text-lg text-center font-greatvibes underline'>{product.name}</p>
+                </Link>
 
-                  {/* Prices */}
-                  <div className='text-center mt-2 flex gap-1 items-center justify-center'>
+                {/* Container for Prices and Add to Cart Button */}
+                <div className='relative'>
+                  {/* Prices - Hidden on hover */}
+                  <div className='text-center mt-2 flex gap-1 items-center justify-center transition-opacity duration-300 ease-in group-hover:opacity-0'>
                     <p className='text-gray-500 text-lg line-through'>{product.price + 500000} đ</p>
                     <p className='text-red-500 text-lg font-bold'>{product.price.toLocaleString()} đ</p>
                   </div>
+
+                  {/* Add to Cart Button - Visible on hover */}
+                  <div className='absolute inset-x-0 -bottom-2 flex justify-center'>
+                    <button
+                      className='bg-red-500 text-white px-4 py-2 rounded-lg w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in'
+                      onClick={(e) => {
+                        e.preventDefault() // Prevents the Link navigation
+                        // Add your logic to add the item to the cart here
+                        console.log(`Added ${product.name} to cart!`)
+                      }}
+                    >
+                      Thêm vào giỏ hàng
+                    </button>
+                  </div>
                 </div>
-              </Link>
+              </div>
             ))
           ) : (
             <p className='text-black text-center text-3xl col-span-4 font-semibold'>
@@ -239,7 +258,7 @@ export default function ProductList() {
                 disabled={!pagination.hasPreviousPage}
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
               >
-                &laquo;
+                «
               </button>
 
               {[...Array(pagination.totalPages)].map((_, index) => {
@@ -260,7 +279,7 @@ export default function ProductList() {
                 disabled={!pagination.hasNextPage}
                 onClick={() => setPage((prev) => Math.min(prev + 1, pagination.totalPages))}
               >
-                &raquo;
+                »
               </button>
             </div>
           </div>

@@ -129,16 +129,16 @@ export default function ProductDetail() {
 
               {/* Price and Discount */}
               <div className='mt-4'>
-                <span className='text-gray-500 line-through'>{basket?.price}đ</span>
-                <span className='text-red-500 text-2xl font-bold ml-2'>{basket?.price}đ</span>
+                <span className='text-gray-500 line-through'>{basket?.price.toLocaleString()}đ</span>
+                <span className='text-red-500 text-2xl font-bold ml-2'>{basket?.price.toLocaleString()}đ</span>
               </div>
 
               {/* Product Description */}
               <ul className='mt-4 text-gray-700 list-disc list-inside'>
                 {basket?.itemNames.map((item, index) => <li key={index}>{item}</li>)}
               </ul>
-              <div>Miêu tả: {basket?.description}</div>
-              <div className='mt-4 flex items-center gap-2'>
+              <div className='mt-3'>Miêu tả: {basket?.description}</div>
+              <div className='mt-3 flex items-center gap-2'>
                 <span className='text-gray-700 font-medium'>Số lượng:</span>
                 <button
                   onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
@@ -156,7 +156,7 @@ export default function ProductDetail() {
               </div>
 
               {/* Discount Banners */}
-              <div className='mt-4'>
+              <div className='mt-6'>
                 <div className='flex flex-row justify-center items-center gap-2'>
                   {/* Previous button */}
                   <button className='bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-300'>

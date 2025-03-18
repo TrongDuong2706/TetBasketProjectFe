@@ -1,14 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom' // Import useNavigate
+import { useNavigate } from 'react-router-dom'
 import { getAllsBasket, getBasketByCategory } from 'src/apis/basket.api'
 
 const ProductPage: React.FC = () => {
-  const navigate = useNavigate() // Khởi tạo navigate
-  const [page, setPage] = useState(1) // Page bắt đầu từ 1
-  const pageSize = 5 // Định kích thước trang
+  const navigate = useNavigate()
+  const [page, setPage] = useState(1)
+  const pageSize = 5
 
-  // Lấy danh sách BasketShell từ API
   const { data, isLoading, isError } = useQuery({
     queryKey: ['getBasketByCategory', page],
     queryFn: () => getBasketByCategory(page, pageSize)
@@ -16,7 +15,6 @@ const ProductPage: React.FC = () => {
 
   const baskets = data?.data.result
 
-  // Kiểm tra trạng thái loading hoặc error
   if (isLoading) return <div>Loading...</div>
   if (isError) return <div>Error loading baskets!</div>
 
@@ -34,7 +32,7 @@ const ProductPage: React.FC = () => {
         {baskets?.elements.map((basket) => (
           <div
             key={basket.id}
-            className='p-4 cursor-pointer relative'
+            className='p-4 cursor-pointer relative group' // Added `group` for hover effects
             onClick={() => navigate(`/product/${basket.id}`)}
           >
             {/* Sale Label */}
@@ -43,7 +41,7 @@ const ProductPage: React.FC = () => {
             {/* Product Image */}
             {basket.images && basket.images[0] && (
               <img
-                className='w-full h-auto rounded-lg '
+                className='w-full h-auto rounded-lg'
                 height='300'
                 src={basket.images[0].imageUrl}
                 width='300'
@@ -51,19 +49,38 @@ const ProductPage: React.FC = () => {
               />
             )}
 
-            {/* Product Name */}
+            {/* Product Name - Always visible */}
             <p className='mt-4 text-lg text-center font-greatvibes underline'>{basket.name}</p>
 
-            {/* Prices */}
-            <div className='text-center mt-2 flex gap-1 items-center '>
-              <p className='text-gray-500 text-xl line-through'>{basket.price + 500000} đ</p>
-              <p className='text-red-500 text-xl font-bold'>{basket.price.toLocaleString()} đ</p>
+            {/* Container for Prices and Add to Cart Button */}
+            <div className='relative'>
+              {/* Prices - Hidden on hover */}
+              <div className='text-center mt-2 flex gap-1 items-center transition-opacity duration-300 ease-in group-hover:opacity-0'>
+                <p className='text-gray-500 text-xl line-through'>{basket.price + 500000} đ</p>
+                <p className='text-red-500 text-xl font-bold'>{basket.price.toLocaleString()} đ</p>
+              </div>
+
+              {/* Add to Cart Button - Visible on hover */}
+              <div className='absolute inset-x-0 -bottom-3 flex justify-center'>
+                <button
+                  className='bg-red-500 w-full text-white px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in'
+                  onClick={(e) => {
+                    e.stopPropagation() // Prevents the onClick of the parent div from firing
+                    // Add your logic to add the item to the cart here
+                    console.log(`Added ${basket.name} to cart!`)
+                  }}
+                >
+                  Thêm vào giỏ hàng
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
       <div className='text-center mt-8'>
-        <a href='/productList' className='bg-red-500 text-white px-6 py-2 rounded-full'>XEM THÊM</a>
+        <a href='/productList' className='bg-red-500 text-white px-6 py-2 rounded-full'>
+          XEM THÊM
+        </a>
       </div>
     </div>
   )
