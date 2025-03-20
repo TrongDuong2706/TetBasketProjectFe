@@ -12,6 +12,7 @@ import ProductDetailInformation from 'src/components/ProductDetailInformation/Pr
 import ProductDetailInformation2 from 'src/components/ProductDetailInformation2/ProductDetailInformation2'
 import { Button } from 'src/components/ui/Button'
 import { Card, CardContent } from 'src/components/ui/card'
+import { getUserId } from 'src/utils/auth'
 
 export default function ProductDetail() {
   const [currentPromoIndex, setCurrentPromoIndex] = useState(0)
@@ -23,6 +24,8 @@ export default function ProductDetail() {
 
   const { basketId } = useParams<{ basketId: string }>()
   const id = basketId ? parseInt(basketId, 10) : 0
+
+  const userIdd = getUserId()
 
   // Fetch basket details
   const {
@@ -54,7 +57,7 @@ export default function ProductDetail() {
     if (!basket) return // Kiểm tra nếu chưa có dữ liệu sản phẩm
 
     addToCartMutation({
-      userId: 'a5111258-1687-46b3-86e9-0447a149b4e9', // Giả định userId là 1, bạn cần lấy từ state hoặc context nếu có
+      userId: userIdd, // Giả định userId là 1, bạn cần lấy từ state hoặc context nếu có
       basketId: basket.id,
       quantity
     })

@@ -52,6 +52,7 @@ export type Orders = {
   email: String
   phoneNumber: String
   address: String
+  note: String
 }
 
 export type OneOrderResponse = SuccessResponse<Orders>

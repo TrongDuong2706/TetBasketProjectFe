@@ -1,3 +1,4 @@
+import { Image } from './image.type'
 import { SuccessResponse } from './utils.type'
 
 export type addToCartResponse = SuccessResponse<{
@@ -20,4 +21,7 @@ export type cartItems = {
   name: string
   price: number
   quantity: number
+  imageUrls: string
 }
+
+export type getAllCartItemResponse = SuccessResponse<cartItems[]>
