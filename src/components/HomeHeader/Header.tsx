@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Search,
   ShoppingBag,
@@ -15,9 +15,9 @@ import {
 import SearchInput from '../SearchInput/SearchInput'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from 'src/contexts/app.context'
-import { useMutation } from '@tanstack/react-query'
-import { LogoutAccount } from 'src/apis/auth.api'
-import { getAccessTokenFromLS } from 'src/utils/auth'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { getMyInfo, LogoutAccount } from 'src/apis/auth.api'
+import { getAccessTokenFromLS, removeUserId, setUserId } from 'src/utils/auth'
 import AddToCart from '../AddToCart/AddToCart'
 
 export default function Header() {
@@ -37,6 +37,7 @@ export default function Header() {
         onSuccess: () => {
           navigate('/')
           setIsAuthenticated(false)
+          removeUserId()
         },
         onError: (error) => {
           console.error('Logout failed:', error)
@@ -50,6 +51,23 @@ export default function Header() {
   const handleAddToCart = () => {
     setCartItems(cartItems + 1)
   }
+
+  const {
+    data: userInfo,
+    isLoading,
+    isError,
+    error
+  } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: getMyInfo,
+    enabled: isAuthenticated // Chỉ gọi API nếu đã đăng nhập
+  })
+  useEffect(() => {
+    if (userInfo?.data?.result?.id) {
+      setUserId(userInfo.data.result.id)
+    }
+  }, [userInfo]) // Chạy mỗi khi userInfo thay đổi
+  const userInfor = userInfo?.data.result
 
   return (
     <header className='bg-[#8B1E15] text-white'>
@@ -67,7 +85,9 @@ export default function Header() {
 
           {isAuthenticated ? (
             <div className='flex items-center gap-4'>
-              <span className='font-semibold'>Chào mừng khách hàng!</span>
+              <span className='font-semibold'>
+                Chào mừng {userInfor?.firstName} {userInfor?.lastName}!
+              </span>
               <button
                 onClick={handleLogout}
                 className='px-4 py-1 text-sm font-medium bg-red-500 rounded hover:bg-red-600'

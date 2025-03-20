@@ -17,7 +17,7 @@ export default function SearchInput() {
     queryKey: ['getBasketByName', page, query],
     queryFn: () => getBasketByName(page, pageSize, query || ''),
     enabled: !!query,
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       if (!data?.data.result.elements.length) {
         setNoResults(true)
       } else {
@@ -96,11 +96,7 @@ export default function SearchInput() {
       )}
 
       {/* No Results Message */}
-      {noResults && query && (
-        <div className='text-white text-sm mt-2'>
-          Không tìm thấy sản phẩm nào phù hợp.
-        </div>
-      )}
+      {noResults && query && <div className='text-white text-sm mt-2'>Không tìm thấy sản phẩm nào phù hợp.</div>}
     </div>
   )
 }

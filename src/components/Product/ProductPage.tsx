@@ -15,8 +15,8 @@ const ProductPage: React.FC = () => {
 
   const baskets = data?.data.result
 
-  if (isLoading) return <div>Loading...</div>
-  if (isError) return <div>Error loading baskets!</div>
+  if (isLoading) return <div>Đang tải dữ liệu....</div>
+  if (isError) return <div>Lỗi khi tải dữ liệu....!</div>
 
   return (
     <div className='container mx-auto px-4 py-8'>

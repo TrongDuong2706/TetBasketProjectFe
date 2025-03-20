@@ -38,16 +38,8 @@ export const schema = yup.object({
 })
 
 export const schemaLogin = yup.object({
-  username: yup
-    .string()
-    .required('Tài khoản không được để trống')
-    .min(5, 'Độ dài từ 5-160 ký tự')
-    .max(160, 'Độ dài từ 5-160 ký tự'),
-  password: yup
-    .string()
-    .required('Mật khẩu không được để trống')
-    .min(3, 'Độ dài từ 6 - 160 ký tự')
-    .max(160, 'Độ dài từ 6 đến 160 ký tự')
+  username: yup.string().required('Tài khoản không được để trống'),
+  password: yup.string().required('Mật khẩu không được để trống')
 })
 
 export const schemaPassword = yup.object({

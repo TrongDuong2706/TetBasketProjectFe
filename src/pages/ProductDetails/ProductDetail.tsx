@@ -1,8 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Gift, Package, PhoneCall, ShieldCheck, ShoppingCart, Truck } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { getAllRelatedBasket, getOneBasket } from 'src/apis/basket.api'
+import { addToCart } from 'src/apis/cart.api'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
 import SignupSalePage from 'src/components/Product/SignupSalePage'
@@ -23,14 +25,40 @@ export default function ProductDetail() {
   const id = basketId ? parseInt(basketId, 10) : 0
 
   // Fetch basket details
-  const { data: basketData, isLoading: basketLoading } = useQuery({
+  const {
+    data: basketData,
+    isLoading: basketLoading,
+    isError: basketError
+  } = useQuery({
     queryKey: ['basket', basketId],
     queryFn: () => getOneBasket(basketId),
     enabled: !!basketId
   })
 
+  //Thêm vào giỏ hàng
+
+  const { mutate: addToCartMutation, isPending: isAddingToCart } = useMutation({
+    mutationFn: addToCart,
+    onSuccess: () => {
+      toast.success('Đã thêm vào giỏ hàng!')
+    },
+    onError: () => {
+      toast.error('Thêm vào giỏ hàng thất bại!')
+    }
+  })
+
   const basket = basketData?.data.result
   const categoryId = basketData?.data.result.categoryId
+
+  const handleAddToCart = () => {
+    if (!basket) return // Kiểm tra nếu chưa có dữ liệu sản phẩm
+
+    addToCartMutation({
+      userId: 'a5111258-1687-46b3-86e9-0447a149b4e9', // Giả định userId là 1, bạn cần lấy từ state hoặc context nếu có
+      basketId: basket.id,
+      quantity
+    })
+  }
 
   const { data: basketRelated, isLoading: isLoadingRelated } = useQuery({
     queryKey: ['basketRelated', page, size, categoryId],
@@ -79,6 +107,8 @@ export default function ProductDetail() {
 
                 <span className='absolute top-2 left-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm'>SALE</span>
               </div>
+              {basketLoading && <div>Đang tải....</div>}
+              {basketError && <div>Lỗi hiển thị sản phẩm....</div>}
               {/* Thumbnail Images */}
               <div className='flex gap-2 mt-4'>
                 {basket?.images.map((thumbnail, index) => (
@@ -229,11 +259,18 @@ export default function ProductDetail() {
                   <PhoneCall className='text-white' size={18} />
                   <span className='text-white font-bold'>0912691343 (Zalo)</span>
                 </div>
-                <div className='flex-1 flex justify-center w-[95%] bg-orange-500 gap-3 items-center px-4 py-3 rounded-full border border-gray-300'>
-                  <span className='text-white flex gap-3'>
-                    <ShoppingCart />
-                    Thêm vào giỏ hàng
-                  </span>
+                <div
+                  className='flex-1 flex justify-center w-[95%] bg-orange-500 gap-3 items-center px-4 py-3 rounded-full border border-gray-300 cursor-pointer'
+                  onClick={handleAddToCart}
+                >
+                  {isAddingToCart ? (
+                    <span className='text-white flex gap-3'>Đang thêm...</span>
+                  ) : (
+                    <span className='text-white flex gap-3'>
+                      <ShoppingCart />
+                      Thêm vào giỏ hàng
+                    </span>
+                  )}
                 </div>
                 <div className='flex-1 flex justify-center w-[95%] bg-teal-500 gap-3 items-center px-4 py-3 rounded-full border border-gray-300'>
                   <span className='text-white'>ĐẶT MUA GIAO TẬN NƠI (THANH TOÁN KHI NHẬN HÀNG)</span>
@@ -248,6 +285,8 @@ export default function ProductDetail() {
           {/* Related Products Section */}
           <div className='mt-8'>
             <h2 className='text-xl font-bold text-gray-800'>Sản Phẩm Liên Quan</h2>
+            {basketLoading && <div>Đang tải....</div>}
+            {basketError && <div>Lỗi hiển thị sản phẩm....</div>}
             <div className='mt-4 grid grid-cols-1 md:grid-cols-2 gap-4'>
               {basketCategoryRelated?.map((product) => (
                 <Link to={`/product/${product.id}`}>
