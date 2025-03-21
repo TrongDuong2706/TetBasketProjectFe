@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getAllItemInCart } from 'src/apis/cart.api'
 import { createOrder } from 'src/apis/order.api' // Giả sử đường dẫn này đúng
 import { toast } from 'react-toastify'
+import { applyVoucher } from 'src/apis/voucher.api'
 interface FormData {
   fullName: string
   email: string
@@ -18,6 +19,7 @@ interface FormData {
 }
 const PlaceOrder: React.FC = () => {
   const userId = getUserId()
+  const [discountAmount, setDiscountAmount] = useState(0)
 
   // State để lưu thông tin form
   const [formData, setFormData] = useState<FormData>({
@@ -38,7 +40,7 @@ const PlaceOrder: React.FC = () => {
 
   // Tính tổng tiền từ cartItems
   const cartItems = data?.data.result || []
-  const totalAmount = cartItems.reduce((sum, item) => sum + item.price, 0) + 30000 // Cộng phí giao hàng
+  const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + 30000 // Cộng phí giao hàng
 
   // Mutation để tạo đơn hàng
   const createOrderMutation = useMutation({
@@ -72,7 +74,7 @@ const PlaceOrder: React.FC = () => {
   const handleSubmitOrder = () => {
     const orderData = {
       userId,
-      totalAmount,
+      totalAmount: discountedTotal,
       voucherCode: formData.voucherCode,
       fullName: formData.fullName,
       email: formData.email,
@@ -86,6 +88,34 @@ const PlaceOrder: React.FC = () => {
 
   if (isLoading) return <div>Đang tải...</div>
   if (error) return <div>Có lỗi xảy ra: {error.message}</div>
+
+  //Apply voucher
+
+  const applyVoucherMutation = useMutation({
+    mutationFn: applyVoucher,
+    onSuccess: (data) => {
+      toast('Áp dụng mã giảm giá thành công')
+      setDiscountedTotal(data.data.result.newOrderAmount) // Cập nhật tổng tiền mới
+    },
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc có lỗi xảy ra'
+      toast(errorMessage) // Hiển thị thông báo lỗi từ API    }
+    }
+  })
+
+  const [discountedTotal, setDiscountedTotal] = useState(totalAmount) // State lưu tổng tiền sau khi áp dụng voucher
+
+  const handleApplyVoucher = () => {
+    if (!formData.voucherCode.trim()) {
+      toast('Vui lòng nhập mã giảm giá')
+      return
+    }
+
+    applyVoucherMutation.mutate({
+      voucherCode: formData.voucherCode,
+      orderAmount: totalAmount
+    })
+  }
 
   return (
     <div className='bg-gray-100 min-h-screen flex flex-col'>
@@ -165,14 +195,20 @@ const PlaceOrder: React.FC = () => {
                   value={formData.voucherCode}
                   onChange={handleInputChange}
                 />
-                <button className='bg-blue-500 text-white px-4 py-2 rounded-r'>Áp dụng</button>
+                <button
+                  className='bg-blue-500 text-white px-4 py-2 rounded-r'
+                  onClick={handleApplyVoucher}
+                  disabled={applyVoucherMutation.isPending}
+                >
+                  {applyVoucherMutation.isPending ? 'Đang áp dụng...' : 'Áp dụng'}
+                </button>
               </div>
             </div>
           </div>
           <div className='border-t pt-4'>
             <div className='flex justify-between text-gray-700 mb-2'>
               <span>Tạm tính ({cartItems.length} sản phẩm):</span>
-              <span>{cartItems.reduce((sum, item) => sum + item.price, 0).toLocaleString()} đ</span>
+              <span>{cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toLocaleString()} đ</span>
             </div>
             <div className='flex justify-between text-gray-700 mb-2'>
               <span>Giao hàng:</span>
@@ -180,7 +216,7 @@ const PlaceOrder: React.FC = () => {
             </div>
             <div className='flex justify-between text-gray-700 font-semibold mb-4'>
               <span>Tổng:</span>
-              <span>{totalAmount.toLocaleString()} đ</span>
+              <span>{discountedTotal.toLocaleString()} đ</span>
             </div>
           </div>
 
@@ -206,7 +242,7 @@ const PlaceOrder: React.FC = () => {
                 <div className='text-gray-600'>{product.price.toLocaleString()} đ</div>
               </div>
               <div className='flex items-center'>
-                <input className='w-12 text-center border rounded mx-2' type='text' value='1' readOnly />
+                <p className='w-12 text-center border rounded mx-2'>{product.quantity}</p>
               </div>
             </div>
           ))}

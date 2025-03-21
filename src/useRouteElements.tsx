@@ -23,6 +23,9 @@ import Cart from './pages/Cart/Cart'
 import ProductList from './pages/ProductList/ProductList'
 import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
 import ProductDetail from './pages/ProductDetails/ProductDetail'
+import AdminListVoucher from './pages/Admin/AdminVoucher/AdminListVoucher'
+import AdminAddVoucher from './pages/Admin/AdminVoucher/AdminAddVoucher'
+import AdminAddFixedVoucher from './pages/Admin/AdminVoucher/AdminAddFixedVoucher'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -177,6 +180,30 @@ export default function useRouteElements() {
           element: (
             <AdminLayout>
               <EditBasketShell />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'voucher-list',
+          element: (
+            <AdminLayout>
+              <AdminListVoucher />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'add-voucher',
+          element: (
+            <AdminLayout>
+              <AdminAddVoucher />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'add-voucher-fixed',
+          element: (
+            <AdminLayout>
+              <AdminAddFixedVoucher />
             </AdminLayout>
           )
         }

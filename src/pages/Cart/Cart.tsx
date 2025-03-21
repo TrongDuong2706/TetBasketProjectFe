@@ -1,18 +1,44 @@
 import React from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
 import { getUserId } from 'src/utils/auth'
-import { getAllItemInCart } from 'src/apis/cart.api'
+import { deleteItemInCart, getAllItemInCart, updateItemInCartQuantity } from 'src/apis/cart.api'
+import { Link } from 'react-router-dom'
+
+interface CartItem {
+  id: number
+  name: string
+  imageUrls: string[]
+  quantity: number
+  price: number
+}
 
 export default function Cart() {
   const userId = getUserId()
+  const queryClient = useQueryClient()
 
   // Call API lấy giỏ hàng
   const { data, isLoading, error } = useQuery({
     queryKey: ['cartItems', userId],
     queryFn: () => getAllItemInCart(userId),
-    enabled: !!userId // Chỉ gọi API nếu userId tồn tại
+    enabled: !!userId
+  })
+
+  // Mutation để cập nhật số lượng sản phẩm
+  const mutation = useMutation({
+    mutationFn: ({ basketId, quantityChange }: { basketId: number; quantityChange: number }) =>
+      updateItemInCartQuantity({ userId, basketId, quantityChange }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] })
+    }
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: ({ basketId }: { basketId: number }) => deleteItemInCart(userId, basketId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] })
+    }
   })
 
   if (isLoading) {
@@ -61,12 +87,32 @@ export default function Cart() {
                     </td>
                     <td className='border p-2'>{item.name}</td>
                     <td className='border p-2'>
-                      <input type='number' defaultValue={item.quantity} className='border w-12 text-center' />
+                      <div className='flex items-center justify-center'>
+                        <button
+                          className='px-3 py-1 bg-gray-300 rounded'
+                          onClick={() => mutation.mutate({ basketId: item.basketId, quantityChange: -1 })}
+                          disabled={item.quantity <= 1}
+                        >
+                          -
+                        </button>
+                        <p className='border w-12 text-center mx-2'>{item.quantity}</p>
+                        <button
+                          className='px-3 py-1 bg-gray-300 rounded'
+                          onClick={() => mutation.mutate({ basketId: item.basketId, quantityChange: 1 })}
+                        >
+                          +
+                        </button>
+                      </div>
                     </td>
                     <td className='border p-2'>{item.price.toLocaleString()}</td>
                     <td className='border p-2'>{(item.price * item.quantity).toLocaleString()}</td>
                     <td className='border p-2'>
-                      <button className='bg-red-500 text-white px-3 py-1 rounded'>🗑 Xóa</button>
+                      <button
+                        className='bg-red-500 text-white px-3 py-1 rounded'
+                        onClick={() => deleteMutation.mutate({ basketId: item.basketId })}
+                      >
+                        🗑 Xóa
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -79,7 +125,9 @@ export default function Cart() {
             <a href='/' className='text-blue-500'>
               ← Quay lại trang sản phẩm
             </a>
-            <button className='bg-blue-500 text-white px-4 py-2 rounded'>Đặt Hàng</button>
+            <Link to='/place-order'>
+              <button className='bg-blue-500 text-white px-4 py-2 rounded'>Đặt Hàng</button>
+            </Link>
           </div>
         </div>
       </main>
