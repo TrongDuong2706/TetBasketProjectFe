@@ -5,6 +5,7 @@ import Header from 'src/components/HomeHeader/Header'
 import { getUserId } from 'src/utils/auth'
 import { deleteItemInCart, getAllItemInCart, updateItemInCartQuantity } from 'src/apis/cart.api'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 interface CartItem {
   id: number
@@ -31,6 +32,10 @@ export default function Cart() {
       updateItemInCartQuantity({ userId, basketId, quantityChange }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cartItems', userId] })
+    },
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Đã xảy ra lỗi'
+      toast.error('Lỗi: ' + message)
     }
   })
 
@@ -109,7 +114,14 @@ export default function Cart() {
                     <td className='border p-2'>
                       <button
                         className='bg-red-500 text-white px-3 py-1 rounded'
-                        onClick={() => deleteMutation.mutate({ basketId: item.basketId })}
+                        onClick={() => {
+                          const confirmed = window.confirm(
+                            'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?'
+                          )
+                          if (confirmed) {
+                            deleteMutation.mutate({ basketId: item.basketId })
+                          }
+                        }}
                       >
                         🗑 Xóa
                       </button>

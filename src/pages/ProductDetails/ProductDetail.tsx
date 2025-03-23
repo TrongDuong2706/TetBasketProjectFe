@@ -152,15 +152,6 @@ export default function ProductDetail() {
               {/* Product Name */}
               <h1 className='text-2xl font-bold text-gray-800'>{basket?.name}</h1>
 
-              {/* Rating and Sold */}
-              {/* <div className='flex items-center gap-2 mt-2'>
-                <div className='flex text-yellow-400'></div>
-                <span className='text-gray-600'>
-                  {product.rating} ({product.reviews} đánh giá)
-                </span>
-                <span className='text-gray-600'>Đã bán {product.sold}</span>
-              </div> */}
-
               {/* Price and Discount */}
               <div className='mt-4'>
                 <span className='text-gray-500 line-through'>{basket?.price.toLocaleString()}đ</span>
