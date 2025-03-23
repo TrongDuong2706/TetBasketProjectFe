@@ -26,6 +26,9 @@ import ProductDetail from './pages/ProductDetails/ProductDetail'
 import AdminListVoucher from './pages/Admin/AdminVoucher/AdminListVoucher'
 import AdminAddVoucher from './pages/Admin/AdminVoucher/AdminAddVoucher'
 import AdminAddFixedVoucher from './pages/Admin/AdminVoucher/AdminAddFixedVoucher'
+import AdminEditVoucher from './pages/Admin/AdminVoucher/AdminEditVoucher/AdminEditVoucher'
+import AdminEditFixedVoucher from './pages/Admin/AdminVoucher/AdminEditFixedVoucher'
+import ListOrderUser from './pages/ListOrderUser'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -62,6 +65,11 @@ export default function useRouteElements() {
       path: '/productList',
       index: true,
       element: <ProductList />
+    },
+    {
+      path: '/order-list',
+      index: true,
+      element: <ListOrderUser />
     },
 
     {
@@ -204,6 +212,22 @@ export default function useRouteElements() {
           element: (
             <AdminLayout>
               <AdminAddFixedVoucher />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'edit-voucher-fixed/:voucherId',
+          element: (
+            <AdminLayout>
+              <AdminEditVoucher />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'edit/voucher/:voucherId',
+          element: (
+            <AdminLayout>
+              <AdminEditFixedVoucher />
             </AdminLayout>
           )
         }

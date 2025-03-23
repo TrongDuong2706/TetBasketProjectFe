@@ -4,6 +4,7 @@ import http from 'src/utils/http'
 export const applyVoucher = (body: { voucherCode: string; orderAmount: number }) =>
   http.post<voucherResponse>('/voucher/apply', body)
 export const getAllVoucher = () => http.get<listVoucherResponse>('/voucher')
+export const getOneVoucher = (voucherId: any) => http.get<oneVoucher>(`/voucher/${voucherId}`)
 
 export const createVoucher = (body: {
   voucherCode: string
@@ -15,3 +16,27 @@ export const createVoucher = (body: {
   minPurchaseAmount: number
   quantity: number
 }) => http.post<oneVoucher>('/voucher', body)
+
+export const deleteVoucher = (voucherId: number) => http.delete<oneVoucher>(`/voucher/${voucherId}`)
+
+export const updateVoucher = (
+  voucherId: number,
+  voucherCode: string,
+  name: string,
+  discountPercentage: number,
+  fixedDiscount: number,
+  expiryDate: Date,
+  status: string,
+  minPurchaseAmount: number,
+  quantity: number
+) =>
+  http.put<oneVoucher>(`/voucher/${voucherId}`, {
+    voucherCode,
+    name,
+    discountPercentage,
+    fixedDiscount,
+    expiryDate,
+    status,
+    minPurchaseAmount,
+    quantity
+  })

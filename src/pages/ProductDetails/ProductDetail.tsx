@@ -45,8 +45,9 @@ export default function ProductDetail() {
     onSuccess: () => {
       toast.success('Đã thêm vào giỏ hàng!')
     },
-    onError: () => {
-      toast.error('Thêm vào giỏ hàng thất bại!')
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Đã xảy ra lỗi'
+      toast.error('Lỗi: ' + message)
     }
   })
 

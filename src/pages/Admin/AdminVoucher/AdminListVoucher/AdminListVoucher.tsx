@@ -1,7 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getAllVoucher } from 'src/apis/voucher.api'
+import { getAllVoucher, deleteVoucher } from 'src/apis/voucher.api'
+import { toast } from 'react-toastify'
 
 export default function AdminListVoucher() {
   const [page, setPage] = useState(1) // Page bắt đầu từ 1
@@ -10,19 +11,35 @@ export default function AdminListVoucher() {
   const {
     data: voucherData,
     isLoading,
-    isError
+    isError,
+    refetch
   } = useQuery({
     queryKey: ['getAllVoucher'],
     queryFn: getAllVoucher
   })
 
-  // Lấy danh sách voucher từ API
-  const vouchers = voucherData?.data.result || []
+  const mutationDelete = useMutation({
+    mutationFn: (voucherId: number) => deleteVoucher(voucherId),
+    onSuccess: () => {
+      toast.success('Xóa voucher thành công!')
+      refetch() // Refresh danh sách voucher sau khi xóa
+    },
+    onError: () => {
+      toast.error('Có lỗi xảy ra khi xóa voucher.')
+    }
+  })
 
+  const vouchers = voucherData?.data.result || []
   const totalPages = Math.ceil(vouchers.length / pageSize)
 
   // Phân trang
   const currentVouchers = vouchers.slice((page - 1) * pageSize, page * pageSize)
+
+  const handleDelete = (voucherId: number) => {
+    if (window.confirm('Bạn chắc chắn muốn xóa voucher này?')) {
+      mutationDelete.mutate(voucherId)
+    }
+  }
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
@@ -85,15 +102,24 @@ export default function AdminListVoucher() {
                   <td className='py-3 px-4'>{voucher.status}</td>
                   <td className='py-3 px-4'>
                     <div className='flex gap-2'>
-                      {/* Nút sửa */}
-                      <Link to={`/admin/voucher/edit/${voucher.id}`}>
+                      <Link
+                        to={
+                          voucher.discountPercentage === null || voucher.discountPercentage === 0
+                            ? `/admin/edit/voucher/${voucher.id}`
+                            : `/admin/edit-voucher-fixed/${voucher.id}`
+                        }
+                      >
                         <button className='bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition'>
                           Sửa
                         </button>
                       </Link>
-                      {/* Nút xóa */}
-                      <button className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition'>
-                        Xóa
+
+                      <button
+                        onClick={() => handleDelete(voucher.id)}
+                        className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition'
+                        disabled={mutationDelete.isPending}
+                      >
+                        {mutationDelete.isPending ? 'Đang xóa...' : 'Xóa'}
                       </button>
                     </div>
                   </td>
