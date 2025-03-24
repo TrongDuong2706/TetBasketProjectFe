@@ -48,10 +48,6 @@ export default function Header() {
 
   const [cartItems, setCartItems] = useState<number>(0)
 
-  const handleAddToCart = () => {
-    setCartItems(cartItems + 1)
-  }
-
   const {
     data: userInfo,
     isLoading,
@@ -120,17 +116,13 @@ export default function Header() {
           <SearchInput />
         </div>
         <div className='flex items-center gap-4'>
-          <div className='relative flex items-center'>
-            <Heart size={18} />
-            <span className='absolute -top-1 -right-2 bg-red-600 text-xs px-1 rounded-full'>0</span>
-          </div>
           <div
             className='relative flex items-center cursor-pointer'
             onClick={() => {
               navigate('/Cart')
             }}
           >
-            <ShoppingBag size={18} />
+            <ShoppingBag size={40} />
             <span className='ml-1 text-sm'>{cartItems} / 0₫</span>
           </div>
           {/* Add the AddToCart component */}

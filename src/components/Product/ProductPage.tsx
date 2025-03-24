@@ -1,9 +1,26 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { getAllsBasket, getBasketByCategory } from 'src/apis/basket.api'
+import { addToCart } from 'src/apis/cart.api'
+import { getUserId } from 'src/utils/auth'
 
 const ProductPage: React.FC = () => {
+  const userId = getUserId()
+  const [quantity, setQuantity] = useState(1)
+
+  const { mutate: addToCartMutation, isPending: isAddingToCart } = useMutation({
+    mutationFn: addToCart,
+    onSuccess: () => {
+      toast.success('Đã thêm vào giỏ hàng!')
+    },
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Đã xảy ra lỗi'
+      toast.error('Lỗi: ' + message)
+    }
+  })
+
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const pageSize = 5
@@ -17,6 +34,14 @@ const ProductPage: React.FC = () => {
 
   if (isLoading) return <div>Đang tải dữ liệu....</div>
   if (isError) return <div>Lỗi khi tải dữ liệu....!</div>
+
+  const handleAddToCart = (basketId: number) => {
+    addToCartMutation({
+      userId,
+      basketId,
+      quantity
+    })
+  }
 
   return (
     <div className='container mx-auto px-4 py-8'>
@@ -66,11 +91,11 @@ const ProductPage: React.FC = () => {
                   className='bg-red-500 w-full text-white px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in'
                   onClick={(e) => {
                     e.stopPropagation() // Prevents the onClick of the parent div from firing
-                    // Add your logic to add the item to the cart here
-                    console.log(`Added ${basket.name} to cart!`)
+                    handleAddToCart(basket.id) // Call the function to add product to the cart
                   }}
+                  disabled={isAddingToCart} // Disable button when adding to cart
                 >
-                  Thêm vào giỏ hàng
+                  {isAddingToCart ? 'Đang thêm...' : 'Thêm vào giỏ hàng'}
                 </button>
               </div>
             </div>

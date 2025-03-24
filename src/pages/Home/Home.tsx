@@ -5,13 +5,17 @@ import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
 import IntroSlider from 'src/components/Slide/IntroSlider'
 import OrderInformation from 'src/components/OrderInfor/OrderInformation'
-import PromoCodes from 'src/components/PromoCodes/PromoCodes' 
+import PromoCodes from 'src/components/PromoCodes/PromoCodes'
 import ProductBox from 'src/components/Product/ProductBox'
 import FlashSalePage from 'src/components/Product/FlashSalePage'
 import SignupSalePage from 'src/components/Product/SignupSalePage'
 import ProductPage from 'src/components/Product/ProductPage'
 import Welcome from 'src/components/Welcome/Welcome'
 import AddToCart from 'src/components/AddToCart/AddToCart'
+import { useMutation } from '@tanstack/react-query'
+import { addToCart } from 'src/apis/cart.api'
+import { toast } from 'react-toastify'
+import { getUserId } from 'src/utils/auth'
 
 export default function HomePage() {
   return (
