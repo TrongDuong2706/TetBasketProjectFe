@@ -50,13 +50,13 @@ const ProductPage: React.FC = () => {
             )}
 
             {/* Product Name - Always visible */}
-            <p className='mt-4 text-lg text-center font-greatvibes underline'>{basket.name}</p>
+            <p className='mt-4 text-lg text-center font-medium underline'>{basket.name}</p>
 
             {/* Container for Prices and Add to Cart Button */}
             <div className='relative'>
               {/* Prices - Hidden on hover */}
               <div className='text-center mt-2 flex gap-1 items-center transition-opacity duration-300 ease-in group-hover:opacity-0'>
-                <p className='text-gray-500 text-xl line-through'>{basket.price + 500000} đ</p>
+                <p className='text-gray-500 text-xl line-through'>{(basket.price + 500000).toLocaleString()} đ</p>
                 <p className='text-red-500 text-xl font-bold'>{basket.price.toLocaleString()} đ</p>
               </div>
 

@@ -38,6 +38,7 @@ export default function ProductDetail() {
   })
 
   const basketCategoryRelated = basketRelated?.data.result.elements
+  console.log("related: "+basketCategoryRelated)
 
   const promoData = [
     {
