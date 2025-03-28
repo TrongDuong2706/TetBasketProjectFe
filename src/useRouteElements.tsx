@@ -23,6 +23,13 @@ import Cart from './pages/Cart/Cart'
 import ProductList from './pages/ProductList/ProductList'
 import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
 import ProductDetail from './pages/ProductDetails/ProductDetail'
+import AdminListVoucher from './pages/Admin/AdminVoucher/AdminListVoucher'
+import AdminAddVoucher from './pages/Admin/AdminVoucher/AdminAddVoucher'
+import AdminAddFixedVoucher from './pages/Admin/AdminVoucher/AdminAddFixedVoucher'
+import AdminEditVoucher from './pages/Admin/AdminVoucher/AdminEditVoucher/AdminEditVoucher'
+import AdminEditFixedVoucher from './pages/Admin/AdminVoucher/AdminEditFixedVoucher'
+import ListOrderUser from './pages/ListOrderUser'
+import OrderDetailUser from './pages/OrderDetailUser'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -60,11 +67,21 @@ export default function useRouteElements() {
       index: true,
       element: <ProductList />
     },
+    {
+      path: '/order-list',
+      index: true,
+      element: <ListOrderUser />
+    },
 
     {
       path: '/product/:basketId',
       index: true,
       element: <ProductDetail />
+    },
+    {
+      path: '/order-detail/:orderId',
+      index: true,
+      element: <OrderDetailUser />
     },
     {
       path: '',
@@ -177,6 +194,46 @@ export default function useRouteElements() {
           element: (
             <AdminLayout>
               <EditBasketShell />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'voucher-list',
+          element: (
+            <AdminLayout>
+              <AdminListVoucher />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'add-voucher',
+          element: (
+            <AdminLayout>
+              <AdminAddVoucher />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'add-voucher-fixed',
+          element: (
+            <AdminLayout>
+              <AdminAddFixedVoucher />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'edit-voucher-fixed/:voucherId',
+          element: (
+            <AdminLayout>
+              <AdminEditVoucher />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'edit/voucher/:voucherId',
+          element: (
+            <AdminLayout>
+              <AdminEditFixedVoucher />
             </AdminLayout>
           )
         }

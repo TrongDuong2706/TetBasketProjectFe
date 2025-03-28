@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { getALLOrders } from 'src/apis/order.api' // API lấy danh sách đơn hàng
+import { changeOrderStatus, getALLOrders } from 'src/apis/order.api' // API lấy danh sách đơn hàng
 
 export default function AdminOrder() {
   const {
@@ -66,6 +66,19 @@ export default function AdminOrder() {
     }
 
     console.log('Lọc: ', JSON.stringify(dataFilter, null, 2))
+  })
+
+  const mutation = useMutation({
+    mutationFn: (orderId: number) => changeOrderStatus(orderId),
+    onSuccess: () => {
+      toast.success('Cập nhật trạng thái đơn hàng thành công')
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000) // Chờ 1 giây cho toast hiển thị xong rồi reload
+    },
+    onError: () => {
+      toast.error('Cập nhật trạng thái thất bại')
+    }
   })
 
   return (
@@ -147,6 +160,12 @@ export default function AdminOrder() {
                           Xem đơn hàng
                         </button>
                       </Link>
+                      <button
+                        onClick={() => mutation.mutate(order.orderId)}
+                        className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition'
+                      >
+                        Cập nhập trạng thái
+                      </button>
                     </div>
                   </td>
                 </tr>

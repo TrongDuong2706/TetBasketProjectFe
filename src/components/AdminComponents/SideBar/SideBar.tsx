@@ -11,7 +11,8 @@ export default function SideBar() {
     { to: '/admin/basket-category', icon: <FaUser className='mr-2' />, label: 'Quản lý Loại giỏ hàng' },
     { to: '/admin/basket-shell', icon: <FaTable className='mr-2' />, label: 'Quản lý Loại vỏ' },
     { to: '/admin/basket', icon: <FaBox className='mr-2' />, label: 'Quản lý giỏ hàng' },
-    { to: '/admin/orders', icon: <FaEnvelope className='mr-2' />, label: 'Quản lý đơn hàng' }
+    { to: '/admin/orders', icon: <FaEnvelope className='mr-2' />, label: 'Quản lý đơn hàng' },
+    { to: '/admin/voucher-list', icon: <FaEnvelope className='mr-2' />, label: 'Quản lý voucher' }
   ]
 
   return (

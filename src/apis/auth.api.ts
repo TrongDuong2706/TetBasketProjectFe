@@ -11,7 +11,7 @@ export const loginAccount = (body: { username: string; password: string }) =>
   http.post<AuthResponse>('/auth/token', body)
 
 // API getInfo
-export const getMyInfo = () => http.get<AuthResponse>('/users/myInfo')
+export const getMyInfo = () => http.get<AuthResponse>('/users/my-info')
 
 //API Logout
 export const LogoutAccount = (body: { token: string }) => http.post<LogoutResponse>('/auth/logout', body)
