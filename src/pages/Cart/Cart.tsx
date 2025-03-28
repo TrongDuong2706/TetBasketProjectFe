@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
@@ -6,6 +6,7 @@ import { getUserId } from 'src/utils/auth'
 import { deleteItemInCart, getAllItemInCart, updateItemInCartQuantity } from 'src/apis/cart.api'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { AppContext } from 'src/contexts/app.context'
 
 interface CartItem {
   id: number
@@ -23,6 +24,8 @@ const normalizeImageUrls = (imageUrls: string | string[]): string[] => {
 }
 
 export default function Cart() {
+  const { refetchCartCount } = useContext(AppContext)
+
   const userId = getUserId()
   const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -39,6 +42,7 @@ export default function Cart() {
       updateItemInCartQuantity({ userId, basketId, quantityChange }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cartItems', userId] })
+      refetchCartCount?.() // 🔥 gọi lại để Header cập nhật ngay
     },
     onError: (error: any) => {
       const message = error?.response?.data?.message || 'Đã xảy ra lỗi'
@@ -52,6 +56,7 @@ export default function Cart() {
       queryClient.invalidateQueries({ queryKey: ['cartItems', userId] })
       setIsModalOpen(false)
       setItemToDelete(null)
+      refetchCartCount?.() // 🔥 gọi lại để Header cập nhật ngay
     },
     onError: (error: any) => {
       const message = error?.response?.data?.message || 'Đã xảy ra lỗi'

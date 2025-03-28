@@ -8,3 +8,8 @@ export const updateItemInCartQuantity = (body: { userId: string; basketId: numbe
   http.put<getAllCartItemResponse>('/cart', body)
 export const deleteItemInCart = (userId: string, basketId: number) =>
   http.delete<getAllCartItemResponse>(`/cart/${userId}/items/${basketId}`)
+
+export const countItemInCart = (userId: string) =>
+  http.get<number>(`/cart/count`, {
+    params: { userId }
+  })

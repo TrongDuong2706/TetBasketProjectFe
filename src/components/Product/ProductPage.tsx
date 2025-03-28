@@ -1,19 +1,22 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getAllsBasket, getBasketByCategory } from 'src/apis/basket.api'
 import { addToCart } from 'src/apis/cart.api'
+import { AppContext } from 'src/contexts/app.context'
 import { getUserId } from 'src/utils/auth'
 
 const ProductPage: React.FC = () => {
   const userId = getUserId()
   const [quantity, setQuantity] = useState(1)
+  const { refetchCartCount } = useContext(AppContext)
 
   const { mutate: addToCartMutation, isPending: isAddingToCart } = useMutation({
     mutationFn: addToCart,
     onSuccess: () => {
       toast.success('Đã thêm vào giỏ hàng!')
+      refetchCartCount?.() // 🔥 gọi lại để Header cập nhật ngay
     },
     onError: (error: any) => {
       const message = error?.response?.data?.message || 'Đã xảy ra lỗi'

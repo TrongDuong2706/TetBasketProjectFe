@@ -20,7 +20,7 @@ export interface Order {
   discountAmount: number
   shippingFee: number
   orderStatus: String
-  orderDate: String
+  orderDate: string
   fullName: String
   email: String
   phoneNumber: String

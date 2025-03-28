@@ -29,6 +29,7 @@ import AdminAddFixedVoucher from './pages/Admin/AdminVoucher/AdminAddFixedVouche
 import AdminEditVoucher from './pages/Admin/AdminVoucher/AdminEditVoucher/AdminEditVoucher'
 import AdminEditFixedVoucher from './pages/Admin/AdminVoucher/AdminEditFixedVoucher'
 import ListOrderUser from './pages/ListOrderUser'
+import OrderDetailUser from './pages/OrderDetailUser'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -76,6 +77,11 @@ export default function useRouteElements() {
       path: '/product/:basketId',
       index: true,
       element: <ProductDetail />
+    },
+    {
+      path: '/order-detail/:orderId',
+      index: true,
+      element: <OrderDetailUser />
     },
     {
       path: '',

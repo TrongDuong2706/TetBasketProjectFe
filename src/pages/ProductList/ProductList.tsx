@@ -1,19 +1,26 @@
-import { useQuery } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import React, { useContext, useState } from 'react'
 import { getFilterAlcohol } from 'src/apis/basket.api'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
 import { Link, useLocation } from 'react-router-dom'
 import { getAllBasketShell, getBasketCategory } from 'src/apis/category.api'
+import { addToCart } from 'src/apis/cart.api'
+import { toast } from 'react-toastify'
+import { AppContext } from 'src/contexts/app.context'
+import { getUserId } from 'src/utils/auth'
 
 export default function ProductList() {
+  const { refetchCartCount } = useContext(AppContext)
+
   const [page, setPage] = useState(1)
   const pageSize = 8
   const location = useLocation()
+  const userId = getUserId()
 
   const queryParams = new URLSearchParams(location.search)
   const searchQuery = queryParams.get('search') || null
-
+  const [quantity, setQuantity] = useState(1)
   const [tempMinPrice, setTempMinPrice] = useState<number | null>(null)
   const [tempMaxPrice, setTempMaxPrice] = useState<number | null>(null)
   const [tempCategoryId, setTempCategoryId] = useState<number | null>(null)
@@ -26,6 +33,26 @@ export default function ProductList() {
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [basketShellId, setBasketShellId] = useState<number | null>(null)
   const [hasAlcohol, setHasAlcohol] = useState<boolean | null>(null)
+
+  const { mutate: addToCartMutation, isPending: isAddingToCart } = useMutation({
+    mutationFn: addToCart,
+    onSuccess: () => {
+      toast.success('Đã thêm vào giỏ hàng!')
+      refetchCartCount?.() // 🔥 gọi lại để Header cập nhật ngay
+    },
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Đã xảy ra lỗi'
+      toast.error('Lỗi: ' + message)
+    }
+  })
+
+  const handleAddToCart = (basketId: number) => {
+    addToCartMutation({
+      userId,
+      basketId,
+      quantity
+    })
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: ['filterAlcohol', page, name, minPrice, maxPrice, categoryId, basketShellId, hasAlcohol],
@@ -232,9 +259,8 @@ export default function ProductList() {
                     <button
                       className='bg-red-500 text-white px-4 py-2 rounded-lg w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in'
                       onClick={(e) => {
-                        e.preventDefault() // Prevents the Link navigation
-                        // Add your logic to add the item to the cart here
-                        console.log(`Added ${product.name} to cart!`)
+                        e.stopPropagation() // Prevents the onClick of the parent div from firing
+                        handleAddToCart(product.id) // Call the function to add product to the cart
                       }}
                     >
                       Thêm vào giỏ hàng

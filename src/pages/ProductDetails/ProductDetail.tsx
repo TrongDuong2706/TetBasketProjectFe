@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Gift, Package, PhoneCall, ShieldCheck, ShoppingCart, Truck } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getAllRelatedBasket, getOneBasket } from 'src/apis/basket.api'
@@ -12,9 +12,12 @@ import ProductDetailInformation from 'src/components/ProductDetailInformation/Pr
 import ProductDetailInformation2 from 'src/components/ProductDetailInformation2/ProductDetailInformation2'
 import { Button } from 'src/components/ui/Button'
 import { Card, CardContent } from 'src/components/ui/card'
+import { AppContext } from 'src/contexts/app.context'
 import { getUserId } from 'src/utils/auth'
 
 export default function ProductDetail() {
+  const { refetchCartCount } = useContext(AppContext)
+
   const [currentPromoIndex, setCurrentPromoIndex] = useState(0)
   const [showForm, setShowForm] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -44,6 +47,7 @@ export default function ProductDetail() {
     mutationFn: addToCart,
     onSuccess: () => {
       toast.success('Đã thêm vào giỏ hàng!')
+      refetchCartCount?.() // 🔥 gọi lại để Header cập nhật ngay
     },
     onError: (error: any) => {
       const message = error?.response?.data?.message || 'Đã xảy ra lỗi'
