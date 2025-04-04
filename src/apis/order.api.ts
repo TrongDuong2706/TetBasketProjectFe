@@ -32,3 +32,5 @@ export const getAllOrderByUserId = (page: number, size: number, userId: string) 
   http.get<OrderResponse>(`/order/check/${userId}`, { params: { page, size } })
 
 export const changeOrderStatus = (orderId: number) => http.put<OneOrderResponse>(`/order/${orderId}`)
+
+export const cancelOrder = (orderId: number) => http.put<OneOrderResponse>(`/order/cancel/${orderId}`)

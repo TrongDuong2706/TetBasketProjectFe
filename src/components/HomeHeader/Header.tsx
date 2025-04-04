@@ -1,5 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Search, ShoppingBag, Phone, Gift, Home, Info, Newspaper, Book, PhoneCall, ChevronDown } from 'lucide-react'
+import {
+  Search,
+  ShoppingBag,
+  Phone,
+  Gift,
+  Home,
+  Info,
+  Newspaper,
+  Book,
+  PhoneCall,
+  ChevronDown,
+  Package
+} from 'lucide-react'
 import SearchInput from '../SearchInput/SearchInput'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from 'src/contexts/app.context'
@@ -139,6 +151,21 @@ export default function Header() {
         >
           <ShoppingBag size={40} />
           <span className='ml-1 text-sm'>{cartItems}</span>
+        </div>
+
+        {/* Icon đơn hàng */}
+        <div
+          className='relative flex items-center cursor-pointer ml-4'
+          onClick={() => {
+            if (isAuthenticated) {
+              navigate('/order-list')
+            } else {
+              navigate('/login')
+            }
+          }}
+        >
+          <Package size={40} />
+          <span className='ml-1 text-sm'>Đơn hàng</span>
         </div>
       </div>
 
