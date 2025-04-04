@@ -243,14 +243,14 @@ export default function ProductList() {
 
                 {/* Product Name - Always visible */}
                 <Link to={`/product/${product.id}`}>
-                  <p className='mt-4 text-lg text-center font-greatvibes underline'>{product.name}</p>
+                  <p className='mt-4 text-lg text-center font-medium underline'>{product.name}</p>
                 </Link>
 
                 {/* Container for Prices and Add to Cart Button */}
                 <div className='relative'>
                   {/* Prices - Hidden on hover */}
                   <div className='text-center mt-2 flex gap-1 items-center justify-center transition-opacity duration-300 ease-in group-hover:opacity-0'>
-                    <p className='text-gray-500 text-lg line-through'>{product.price + 500000} đ</p>
+                    <p className='text-gray-500 text-lg line-through'>{(product.price + 500000).toLocaleString()} đ</p>
                     <p className='text-red-500 text-lg font-bold'>{product.price.toLocaleString()} đ</p>
                   </div>
 
