@@ -91,14 +91,27 @@ export default function AdminBasket() {
   const deleteMutation = useMutation({
     mutationFn: (basketId: number) => deleteBasket(basketId),
     onSuccess: () => {
-      toast('Delete thành công')
+      toast('Xóa giỏ hàng thành công')
       // Optionally refetch data or handle other success actions
+    },
+    onError: (error: any) => {
+      // Xử lý lỗi khi xảy ra
+      if (error.response && error.response.data) {
+        // Nếu server trả về thông báo lỗi trong response
+        toast(`${error.response.data.message}`)
+      } else {
+        // Nếu không có thông báo lỗi cụ thể
+        toast('Đã xảy ra lỗi khi xóa giỏ hàng')
+      }
     }
   })
 
   // Define the delete handler
   const handleDelete = (basketId: number) => () => {
-    deleteMutation.mutate(basketId)
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa giỏ hàng này không?')
+    if (isConfirmed) {
+      deleteMutation.mutate(basketId)
+    }
   }
 
   return (
@@ -148,7 +161,7 @@ export default function AdminBasket() {
           ))}
         </select>
 
-        <button className='bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition'>Search</button>
+        <button className='bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition'>Tìm kiếm</button>
         <button
           className='bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition'
           onClick={(e) => {
@@ -179,13 +192,19 @@ export default function AdminBasket() {
             {isLoading ? (
               <tr>
                 <td colSpan={6} className='py-3 px-4 text-center'>
-                  Đang tải...
+                  Đang tải dữ liệu giỏ hàng...
                 </td>
               </tr>
             ) : isError ? (
               <tr>
                 <td colSpan={6} className='py-3 px-4 text-center text-red-500'>
                   Đã có lỗi xảy ra!
+                </td>
+              </tr>
+            ) : baskets && baskets.length === 0 ? (
+              <tr>
+                <td colSpan={8} className='py-3 px-4 text-center text-gray-500'>
+                  Không tìm thấy sản phẩm nào đạt điều kiện
                 </td>
               </tr>
             ) : (

@@ -152,7 +152,36 @@ export default function AdminOrder() {
                   <td className='py-3 px-4'>{order.address}</td>
                   <td className='py-3 px-4'>{order.totalAmount}₫</td>
                   <td className='py-3 px-4'>{order.phoneNumber}</td>
-                  <td className='py-3 px-4'>{order.orderStatus}</td>
+                  <td className='py-3 px-4'>
+                    <p
+                      className={`font-bold ${
+                        order.orderStatus === 'PENDING'
+                          ? 'text-yellow-500'
+                          : order.orderStatus === 'CONFIRMED'
+                            ? 'text-blue-500'
+                            : order.orderStatus === 'SHIPPED'
+                              ? 'text-orange-500'
+                              : order.orderStatus === 'DELIVERED'
+                                ? 'text-green-500'
+                                : order.orderStatus === 'CANCELED'
+                                  ? 'text-red-500'
+                                  : 'text-gray-500'
+                      }`}
+                    >
+                      {order.orderStatus === 'PENDING'
+                        ? 'Đang chờ xác nhận đơn hàng'
+                        : order.orderStatus === 'CONFIRMED'
+                          ? 'Đơn hàng của bạn đã được xác nhận.'
+                          : order.orderStatus === 'SHIPPED'
+                            ? 'Đơn hàng của bạn đã được gửi đi.'
+                            : order.orderStatus === 'DELIVERED'
+                              ? 'Đơn hàng của bạn đã được giao thành công.'
+                              : order.orderStatus === 'CANCELED'
+                                ? 'Đơn hàng đã bị hủy.'
+                                : 'Trạng thái không xác định'}
+                    </p>
+                  </td>
+
                   <td className='py-3 px-4'>
                     <div className='flex gap-2'>
                       <Link to={`/admin/orders/${order.orderId}`}>
