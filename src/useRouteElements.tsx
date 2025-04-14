@@ -30,6 +30,7 @@ import AdminEditVoucher from './pages/Admin/AdminVoucher/AdminEditVoucher/AdminE
 import AdminEditFixedVoucher from './pages/Admin/AdminVoucher/AdminEditFixedVoucher'
 import ListOrderUser from './pages/ListOrderUser'
 import OrderDetailUser from './pages/OrderDetailUser'
+import ThanksForOrder from './pages/ThanksForOrder'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -82,6 +83,16 @@ export default function useRouteElements() {
       path: '/order-detail/:orderId',
       index: true,
       element: <OrderDetailUser />
+    },
+    {
+      path: '/order-confirm',
+      index: true,
+      element: <ThanksForOrder />
+    },
+    {
+      path: '/product-list',
+      index: true,
+      element: <ProductList />
     },
     {
       path: '',

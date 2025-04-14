@@ -38,10 +38,12 @@ export default function AdminEditVoucher() {
       setValue('fixedDiscount', v.fixedDiscount || 0)
       setValue('expiryDate', v.expiryDate?.slice(0, 10) || '')
       setValue('quantity', v.quantity || 0)
-      setValue('status', v.status || 'active')
+      setValue('status', v.status || 'ACTIVE')
       setValue('minPurchaseAmount', v.minPurchaseAmount || 0)
     }
   }, [voucherData, setValue])
+
+  console.log(voucherData?.data.result)
 
   const mutation = useMutation({
     mutationFn: (data: any) =>
@@ -110,8 +112,8 @@ export default function AdminEditVoucher() {
           <div className='flex flex-col'>
             <label className='text-gray-700'>Trạng thái</label>
             <select className='p-2 border rounded-md' {...register('status')}>
-              <option value='active'>Kích hoạt</option>
-              <option value='inactive'>Tạm ngưng</option>
+              <option value='ACTIVE'>Kích hoạt</option>
+              <option value='INACTIVE'>Tạm ngưng</option>
             </select>
           </div>
 

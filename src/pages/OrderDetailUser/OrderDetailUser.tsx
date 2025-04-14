@@ -44,6 +44,7 @@ export default function OrderDetail() {
 
   // Handle cancel order
   const handleCancel = () => {
+    window.confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')
     deleteMutation.mutate()
   }
 

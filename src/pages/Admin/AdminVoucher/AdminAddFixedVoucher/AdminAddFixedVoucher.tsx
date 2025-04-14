@@ -97,7 +97,7 @@ export default function AdminAddFixedVoucher() {
             {errors.voucher_code && <p className='text-red-500 text-sm'>{errors.voucher_code.message}</p>}
           </div>
 
-          {/* Giảm Giá (%) */}
+          {/* Giảm Giá Cố Định */}
           <div>
             <label className='block text-gray-700' htmlFor='fixedDiscount'>
               Giảm Giá Cố Định <span className='text-red-500'>*</span>
@@ -105,7 +105,10 @@ export default function AdminAddFixedVoucher() {
             <input
               type='number'
               id='fixedDiscount'
-              {...register('fixedDiscount', { required: 'Giảm giá cố định là bắt buộc' })}
+              {...register('fixedDiscount', {
+                required: 'Giảm giá cố định là bắt buộc',
+                min: { value: 1, message: 'Giảm giá cố định phải lớn hơn 0' }
+              })}
               className='mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
               placeholder='Nhập giá giảm cố định'
             />
@@ -134,7 +137,10 @@ export default function AdminAddFixedVoucher() {
             <input
               type='number'
               id='quantity'
-              {...register('quantity', { required: 'Số lượng là bắt buộc' })}
+              {...register('quantity', {
+                required: 'Số lượng là bắt buộc',
+                min: { value: 1, message: 'Số lượng phải lớn hơn 0' }
+              })}
               className='mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
               placeholder='Nhập số lượng voucher'
             />
@@ -165,7 +171,10 @@ export default function AdminAddFixedVoucher() {
             <input
               type='number'
               id='min_purchase_amount'
-              {...register('min_purchase_amount', { required: 'Điều kiện áp dụng là bắt buộc' })}
+              {...register('min_purchase_amount', {
+                required: 'Điều kiện áp dụng là bắt buộc',
+                min: { value: 1, message: 'Điều kiện áp dụng phải lớn hơn 0' }
+              })}
               className='mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
               placeholder='Nhập điều kiện tối thiểu để áp dụng'
             />

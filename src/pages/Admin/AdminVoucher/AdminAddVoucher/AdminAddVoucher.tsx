@@ -36,7 +36,7 @@ export default function AdminAddVoucher() {
     }) => createVoucher(data),
     onSuccess: () => {
       toast.success('🎉 Tạo voucher thành công!')
-      navigate('/admin/voucher') // Điều hướng về trang danh sách voucher
+      navigate('/admin/voucher-list') // Điều hướng về trang danh sách voucher
     },
     onError: (error: any) => {
       const errorMessage = error?.response?.data?.message || 'Đã xảy ra lỗi khi tạo voucher.'
@@ -104,7 +104,17 @@ export default function AdminAddVoucher() {
             <input
               type='number'
               id='discount_percentage'
-              {...register('discount_percentage', { required: 'Giảm giá (%) là bắt buộc' })}
+              {...register('discount_percentage', {
+                required: 'Giảm giá (%) là bắt buộc',
+                min: {
+                  value: 0,
+                  message: 'Phần trăm giảm giá phải từ 0 đến 100'
+                },
+                max: {
+                  value: 100,
+                  message: 'Phần trăm giảm giá phải từ 0 đến 100'
+                }
+              })}
               className='mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
               placeholder='Nhập phần trăm giảm giá'
             />
@@ -133,7 +143,13 @@ export default function AdminAddVoucher() {
             <input
               type='number'
               id='quantity'
-              {...register('quantity', { required: 'Số lượng là bắt buộc' })}
+              {...register('quantity', {
+                required: 'Số lượng là bắt buộc',
+                min: {
+                  value: 1,
+                  message: 'Số lượng phải lớn hơn 0'
+                }
+              })}
               className='mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
               placeholder='Nhập số lượng voucher'
             />

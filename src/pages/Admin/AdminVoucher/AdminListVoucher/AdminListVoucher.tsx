@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 
 export default function AdminListVoucher() {
   const [page, setPage] = useState(1) // Page bắt đầu từ 1
-  const pageSize = 3 // Định kích thước trang
+  const pageSize = 8 // Định kích thước trang
 
   const {
     data: voucherData,
@@ -47,17 +47,19 @@ export default function AdminListVoucher() {
         <h1 className='text-2xl font-semibold text-gray-800'>Danh sách Voucher</h1>
 
         {/* Nút Thêm Voucher */}
-        <Link to='/admin/add-voucher'>
-          <button className='bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition'>
-            Thêm Voucher theo phần trăm
-          </button>
-        </Link>
+        <div className='flex gap-2'>
+          <Link to='/admin/add-voucher'>
+            <button className='bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition'>
+              Thêm Voucher theo phần trăm
+            </button>
+          </Link>
 
-        <Link to='/admin/add-voucher-fixed'>
-          <button className='bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition'>
-            Thêm Voucher theo giá cứng
-          </button>
-        </Link>
+          <Link to='/admin/add-voucher-fixed'>
+            <button className='bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition'>
+              Thêm Voucher giá cứng
+            </button>
+          </Link>
+        </div>
       </div>
 
       {/* Bảng danh sách Voucher */}

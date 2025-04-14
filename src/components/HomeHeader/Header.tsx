@@ -177,23 +177,23 @@ export default function Header() {
           </button>
           <div className='absolute w-full hidden group-hover:block bg-red-600 text-white mt-1 rounded shadow-lg top-8'>
             <hr className='border-t border-white' />
-            <a href='#' className='block px-4 py-2 hover:bg-red-700'>
+            <a href='/productlist?categoryId=1' className='block px-4 py-2 hover:bg-red-700'>
               Hộp Quà Tết
             </a>
             <hr className='border-t border-white' />
-            <a href='#' className='block px-4 py-2 hover:bg-red-700'>
+            <a href='/productlist?categoryId=2' className='block px-4 py-2 hover:bg-red-700'>
               Giỏ Quà Tết
             </a>
             <hr className='border-t border-white' />
-            <a href='#' className='block px-4 py-2 hover:bg-red-700'>
+            <a href='/productlist?categoryId=3' className='block px-4 py-2 hover:bg-red-700'>
               Hộp Quà Cao Cấp
             </a>
             <hr className='border-t border-white' />
-            <a href='#' className='block px-4 py-2 hover:bg-red-700'>
+            <a href='/productlist?categoryId=4' className='block px-4 py-2 hover:bg-red-700'>
               Hộp Quà Doanh Nghiệp
             </a>
             <hr className='border-t border-white' />
-            <a href='#' className='block px-4 py-2 hover:bg-red-700'>
+            <a href='/productlist?categoryId=5' className='block px-4 py-2 hover:bg-red-700'>
               Quà Tết Giá Rẻ
             </a>
           </div>
@@ -202,7 +202,7 @@ export default function Header() {
           <a href='/' className='flex items-center gap-1 text-yellow-100 hover:scale-110'>
             <Home size={16} /> TRANG CHỦ
           </a>
-          <a href='/productList' className='flex items-center gap-1 text-yellow-100 hover:scale-110'>
+          <a href='/product-list' className='flex items-center gap-1 text-yellow-100 hover:scale-110'>
             <Gift size={16} /> QUÀ TẾT
           </a>
           <a href='#' className='flex items-center gap-1 text-yellow-100 hover:scale-110'>

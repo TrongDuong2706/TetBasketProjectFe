@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import Header from 'src/components/HomeHeader/Header'
 import Footer from 'src/components/Footer/Footer'
 import { FaPhoneAlt } from 'react-icons/fa'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { getUserId } from 'src/utils/auth'
-import { useQuery } from '@tanstack/react-query'
 import { getAllItemInCart } from 'src/apis/cart.api'
-import { createOrder } from 'src/apis/order.api' // Giả sử đường dẫn này đúng
+import { createOrder } from 'src/apis/order.api'
 import { toast } from 'react-toastify'
 import { applyVoucher } from 'src/apis/voucher.api'
+import { useNavigate, useNavigation } from 'react-router-dom'
+
 interface FormData {
   fullName: string
   email: string
@@ -17,11 +18,11 @@ interface FormData {
   note: string
   voucherCode: string
 }
+
 const PlaceOrder: React.FC = () => {
   const userId = getUserId()
   const [discountAmount, setDiscountAmount] = useState(0)
 
-  // State để lưu thông tin form
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     email: '',
@@ -31,18 +32,19 @@ const PlaceOrder: React.FC = () => {
     voucherCode: ''
   })
 
-  // Call API lấy giỏ hàng
+  const [errors, setErrors] = useState<Partial<FormData>>({})
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['cartItems', userId],
     queryFn: () => getAllItemInCart(userId),
     enabled: !!userId
   })
 
-  // Tính tổng tiền từ cartItems
   const cartItems = data?.data.result || []
-  const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + 30000 // Cộng phí giao hàng
+  const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + 30000
+  const [discountedTotal, setDiscountedTotal] = useState(totalAmount)
+  const navigate = useNavigate()
 
-  // Mutation để tạo đơn hàng
   const createOrderMutation = useMutation({
     mutationFn: createOrder,
     onSuccess: () => {
@@ -55,13 +57,26 @@ const PlaceOrder: React.FC = () => {
         note: '',
         voucherCode: ''
       })
+      setErrors({})
+      navigate('/order-confirm')
     },
-    onError: (error: Error) => {
+    onError: () => {
       toast('Đặt hàng thất bại')
     }
   })
 
-  // Handle input change
+  const applyVoucherMutation = useMutation({
+    mutationFn: applyVoucher,
+    onSuccess: (data) => {
+      toast('Áp dụng mã giảm giá thành công')
+      setDiscountedTotal(data.data.result.newOrderAmount)
+    },
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc có lỗi xảy ra'
+      toast(errorMessage)
+    }
+  })
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -70,8 +85,34 @@ const PlaceOrder: React.FC = () => {
     }))
   }
 
-  // Handle submit order
+  const validateForm = (): boolean => {
+    const newErrors: Partial<FormData> = {}
+
+    if (!formData.fullName.trim()) newErrors.fullName = 'Vui lòng nhập họ và tên'
+    if (!formData.email.trim()) {
+      newErrors.email = 'Vui lòng nhập email'
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email không hợp lệ'
+    }
+
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Vui lòng nhập số điện thoại'
+    } else if (!/^(0|\+84)[0-9]{9}$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = 'Số điện thoại không hợp lệ'
+    }
+
+    if (!formData.address.trim()) newErrors.address = 'Vui lòng nhập địa chỉ'
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
   const handleSubmitOrder = () => {
+    if (!validateForm()) {
+      toast.error('Vui lòng điền đầy đủ và đúng thông tin trước khi đặt hàng')
+      return
+    }
+
     const orderData = {
       userId,
       totalAmount: discountedTotal,
@@ -86,25 +127,6 @@ const PlaceOrder: React.FC = () => {
     createOrderMutation.mutate(orderData)
   }
 
-  if (isLoading) return <div>Đang tải...</div>
-  if (error) return <div>Có lỗi xảy ra: {error.message}</div>
-
-  //Apply voucher
-
-  const applyVoucherMutation = useMutation({
-    mutationFn: applyVoucher,
-    onSuccess: (data) => {
-      toast('Áp dụng mã giảm giá thành công')
-      setDiscountedTotal(data.data.result.newOrderAmount) // Cập nhật tổng tiền mới
-    },
-    onError: (error: any) => {
-      const errorMessage = error?.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc có lỗi xảy ra'
-      toast(errorMessage) // Hiển thị thông báo lỗi từ API    }
-    }
-  })
-
-  const [discountedTotal, setDiscountedTotal] = useState(totalAmount) // State lưu tổng tiền sau khi áp dụng voucher
-
   const handleApplyVoucher = () => {
     if (!formData.voucherCode.trim()) {
       toast('Vui lòng nhập mã giảm giá')
@@ -116,6 +138,9 @@ const PlaceOrder: React.FC = () => {
       orderAmount: totalAmount
     })
   }
+
+  if (isLoading) return <div>Đang tải...</div>
+  if (error) return <div>Có lỗi xảy ra: {error.message}</div>
 
   return (
     <div className='bg-gray-100 min-h-screen flex flex-col'>
@@ -135,6 +160,7 @@ const PlaceOrder: React.FC = () => {
                   value={formData.fullName}
                   onChange={handleInputChange}
                 />
+                {errors.fullName && <p className='text-red-500 text-sm'>{errors.fullName}</p>}
               </div>
               <div>
                 <label className='block text-gray-700'>Địa chỉ email *</label>
@@ -146,6 +172,7 @@ const PlaceOrder: React.FC = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                 />
+                {errors.email && <p className='text-red-500 text-sm'>{errors.email}</p>}
               </div>
               <div>
                 <label className='block text-gray-700'>Số điện thoại *</label>
@@ -157,6 +184,7 @@ const PlaceOrder: React.FC = () => {
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
                 />
+                {errors.phoneNumber && <p className='text-red-500 text-sm'>{errors.phoneNumber}</p>}
               </div>
               <div>
                 <label className='block text-gray-700'>Địa chỉ *</label>
@@ -168,6 +196,7 @@ const PlaceOrder: React.FC = () => {
                   value={formData.address}
                   onChange={handleInputChange}
                 />
+                {errors.address && <p className='text-red-500 text-sm'>{errors.address}</p>}
               </div>
             </div>
             <div className='mb-4'>
@@ -231,7 +260,6 @@ const PlaceOrder: React.FC = () => {
           >
             {createOrderMutation.isPending ? 'Đang xử lý...' : 'Đặt hàng'}
           </button>
-          <div className='mt-4 flex flex-col items-start space-y-1'></div>
         </div>
         <div className='max-w-2xl bg-white p-6 rounded-lg shadow-md w-full mt-4 md:mt-0 md:ml-4 flex flex-col justify-between'>
           {cartItems.map((product) => (

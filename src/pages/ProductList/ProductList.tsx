@@ -20,6 +20,8 @@ export default function ProductList() {
 
   const queryParams = new URLSearchParams(location.search)
   const searchQuery = queryParams.get('search') || null
+  const categoryQuery = queryParams.get('categoryId') || null
+
   const [quantity, setQuantity] = useState(1)
   const [tempMinPrice, setTempMinPrice] = useState<number | null>(null)
   const [tempMaxPrice, setTempMaxPrice] = useState<number | null>(null)
@@ -30,7 +32,7 @@ export default function ProductList() {
   const [name, setName] = useState<string | null>(searchQuery)
   const [minPrice, setMinPrice] = useState<number | null>(null)
   const [maxPrice, setMaxPrice] = useState<number | null>(null)
-  const [categoryId, setCategoryId] = useState<number | null>(null)
+  const [categoryId, setCategoryId] = useState<number | null>(categoryQuery ? parseInt(categoryQuery, 10) : null)
   const [basketShellId, setBasketShellId] = useState<number | null>(null)
   const [hasAlcohol, setHasAlcohol] = useState<boolean | null>(null)
 
