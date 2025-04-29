@@ -51,7 +51,7 @@ export default function ProductDetail() {
     },
     onError: (error: any) => {
       const message = error?.response?.data?.message || 'Đã xảy ra lỗi'
-      toast.error('Lỗi: ' + message)
+      toast.error(message)
     }
   })
 
@@ -74,7 +74,7 @@ export default function ProductDetail() {
   })
 
   const basketCategoryRelated = basketRelated?.data.result.elements
-  console.log("related: "+basketCategoryRelated)
+  console.log('related: ' + basketCategoryRelated)
 
   const promoData = [
     {

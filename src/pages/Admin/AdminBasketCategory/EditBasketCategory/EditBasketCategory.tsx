@@ -18,7 +18,13 @@ export default function EditBasketCategory() {
   })
 
   // Khởi tạo form
-  const { register, setValue, handleSubmit } = useForm({
+  // Khởi tạo form
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
     defaultValues: {
       name: '',
       description: ''
@@ -63,7 +69,12 @@ export default function EditBasketCategory() {
           {/* Tên loại giỏ hàng */}
           <div className='flex flex-col'>
             <label className='text-gray-700'>Tên loại giỏ hàng</label>
-            <input type='text' className='p-2 border rounded-md' {...register('name')} />
+            <input
+              type='text'
+              className='p-2 border rounded-md'
+              {...register('name', { required: 'Tên loại giỏ hàng là bắt buộc' })}
+            />
+            {errors.name && <span className='text-red-500 text-sm mt-1'>{errors.name.message}</span>}
           </div>
 
           {/* Mô tả */}

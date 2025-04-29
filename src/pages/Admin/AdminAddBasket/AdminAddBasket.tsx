@@ -102,6 +102,7 @@ export default function AdminAddBasket() {
             placeholder='Nhập tên giỏ hàng'
             {...register('name', { required: 'Tên giỏ hàng là bắt buộc' })}
           />
+          {errors.name && <span className='text-red-500 text-sm mt-1'>{errors.name.message}</span>}
         </div>
 
         {/* Giá */}
@@ -113,6 +114,7 @@ export default function AdminAddBasket() {
             placeholder='Nhập giá giỏ hàng'
             {...register('price', { required: 'Giá là bắt buộc' })}
           />
+          {errors.price && <span className='text-red-500 text-sm mt-1'>{errors.price.message}</span>}
         </div>
 
         {/* Số lượng */}
@@ -124,6 +126,7 @@ export default function AdminAddBasket() {
             placeholder='Nhập số lượng'
             {...register('quantity', { required: 'Số lượng là bắt buộc' })}
           />
+          {errors.quantity && <span className='text-red-500 text-sm mt-1'>{errors.quantity.message}</span>}
         </div>
 
         {/* Loại giỏ hàng */}
@@ -140,7 +143,9 @@ export default function AdminAddBasket() {
               </option>
             ))}
           </select>
+          {errors.categoryId && <span className='text-red-500 text-sm mt-1'>{errors.categoryId.message}</span>}
         </div>
+
         {/* Vỏ hàng */}
         <div className='col-span-1 flex flex-col'>
           <label className='text-gray-700 mb-1'>Loại vỏ</label>
@@ -155,6 +160,7 @@ export default function AdminAddBasket() {
               </option>
             ))}
           </select>
+          {errors.basketShellId && <span className='text-red-500 text-sm mt-1'>{errors.basketShellId.message}</span>}
         </div>
 
         {/* Trạng thái */}
@@ -168,6 +174,7 @@ export default function AdminAddBasket() {
             <option value='0'>Hết hàng</option>
             <option value='2'>Ngừng bán</option>
           </select>
+          {errors.status && <span className='text-red-500 text-sm mt-1'>{errors.status.message}</span>}
         </div>
 
         {/* Miêu tả */}

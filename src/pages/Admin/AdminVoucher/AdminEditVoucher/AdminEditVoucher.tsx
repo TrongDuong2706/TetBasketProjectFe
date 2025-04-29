@@ -16,7 +16,12 @@ export default function AdminEditVoucher() {
     enabled: !!id
   })
 
-  const { register, handleSubmit, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors }
+  } = useForm({
     defaultValues: {
       name: '',
       voucherCode: '',
@@ -24,7 +29,7 @@ export default function AdminEditVoucher() {
       fixedDiscount: 0,
       expiryDate: '',
       quantity: 0,
-      status: 'active',
+      status: 'ACTIVE',
       minPurchaseAmount: 0
     }
   })
@@ -42,8 +47,6 @@ export default function AdminEditVoucher() {
       setValue('minPurchaseAmount', v.minPurchaseAmount || 0)
     }
   }, [voucherData, setValue])
-
-  console.log(voucherData?.data.result)
 
   const mutation = useMutation({
     mutationFn: (data: any) =>
@@ -79,44 +82,93 @@ export default function AdminEditVoucher() {
 
       <div className='bg-white p-6 shadow-md rounded-md'>
         <form className='grid grid-cols-1 gap-6' onSubmit={handleSubmit(onSubmit)}>
+          {/* Tên Voucher */}
           <div className='flex flex-col'>
             <label className='text-gray-700'>Tên Voucher</label>
-            <input type='text' className='p-2 border rounded-md' {...register('name')} />
+            <input
+              type='text'
+              className='p-2 border rounded-md'
+              {...register('name', { required: 'Tên voucher là bắt buộc' })}
+            />
+            {errors.name && <p className='text-red-500 text-sm'>{errors.name.message}</p>}
           </div>
 
+          {/* Mã Voucher */}
           <div className='flex flex-col'>
             <label className='text-gray-700'>Mã Voucher</label>
-            <input type='text' className='p-2 border rounded-md' {...register('voucherCode')} />
+            <input
+              type='text'
+              className='p-2 border rounded-md'
+              {...register('voucherCode', { required: 'Mã voucher là bắt buộc' })}
+            />
+            {errors.voucherCode && <p className='text-red-500 text-sm'>{errors.voucherCode.message}</p>}
           </div>
 
+          {/* Phần trăm giảm giá */}
           <div className='flex flex-col'>
             <label className='text-gray-700'>Phần trăm giảm giá (%)</label>
-            <input type='number' className='p-2 border rounded-md' {...register('discountPercentage')} />
+            <input
+              type='number'
+              className='p-2 border rounded-md'
+              {...register('discountPercentage', {
+                required: 'Phần trăm giảm giá là bắt buộc',
+                min: { value: 0, message: 'Tối thiểu là 0%' },
+                max: { value: 100, message: 'Tối đa là 100%' }
+              })}
+            />
+            {errors.discountPercentage && <p className='text-red-500 text-sm'>{errors.discountPercentage.message}</p>}
           </div>
 
+          {/* Giá trị đơn hàng tối thiểu */}
           <div className='flex flex-col'>
             <label className='text-gray-700'>Giá trị đơn hàng tối thiểu</label>
-            <input type='number' className='p-2 border rounded-md' {...register('minPurchaseAmount')} />
+            <input
+              type='number'
+              className='p-2 border rounded-md'
+              {...register('minPurchaseAmount', {
+                required: 'Giá trị tối thiểu là bắt buộc',
+                min: { value: 0, message: 'Giá trị không được âm' }
+              })}
+            />
+            {errors.minPurchaseAmount && <p className='text-red-500 text-sm'>{errors.minPurchaseAmount.message}</p>}
           </div>
 
+          {/* Ngày hết hạn */}
           <div className='flex flex-col'>
             <label className='text-gray-700'>Ngày hết hạn</label>
-            <input type='date' className='p-2 border rounded-md' {...register('expiryDate')} />
+            <input
+              type='date'
+              className='p-2 border rounded-md'
+              {...register('expiryDate', { required: 'Ngày hết hạn là bắt buộc' })}
+            />
+            {errors.expiryDate && <p className='text-red-500 text-sm'>{errors.expiryDate.message}</p>}
           </div>
 
+          {/* Số lượng */}
           <div className='flex flex-col'>
             <label className='text-gray-700'>Số lượng</label>
-            <input type='number' className='p-2 border rounded-md' {...register('quantity')} />
+            <input
+              type='number'
+              className='p-2 border rounded-md'
+              {...register('quantity', {
+                required: 'Số lượng là bắt buộc',
+                min: { value: 1, message: 'Số lượng tối thiểu là 1' }
+              })}
+            />
+            {errors.quantity && <p className='text-red-500 text-sm'>{errors.quantity.message}</p>}
           </div>
 
+          {/* Trạng thái */}
           <div className='flex flex-col'>
             <label className='text-gray-700'>Trạng thái</label>
-            <select className='p-2 border rounded-md' {...register('status')}>
+            <select className='p-2 border rounded-md' {...register('status', { required: 'Trạng thái là bắt buộc' })}>
               <option value='ACTIVE'>Kích hoạt</option>
               <option value='INACTIVE'>Tạm ngưng</option>
             </select>
+            {errors.status && <p className='text-red-500 text-sm'>{errors.status.message}</p>}
           </div>
 
+          {/* Button */}
           <div className='flex justify-between'>
             <Link to='/admin/voucher-list'>
               <button className='bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition'>

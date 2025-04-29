@@ -14,7 +14,7 @@ export default function AdminBasket() {
   } = useForm()
 
   const [page, setPage] = useState(1) // Page bắt đầu từ 1
-  const pageSize = 3 // Định kích thước trang
+  const pageSize = 10 // Định kích thước trang
   const [name, setName] = useState<string | null>(null)
   const [minPrice, setMinPrice] = useState<number | null>(null)
   const [maxPrice, setMaxPrice] = useState<number | null>(null)

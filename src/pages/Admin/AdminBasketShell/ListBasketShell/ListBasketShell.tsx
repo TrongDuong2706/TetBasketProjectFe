@@ -6,7 +6,7 @@ import { deleteBasketShell, getAllBasketShell } from 'src/apis/category.api'
 
 export default function ListBasketShell() {
   const [page, setPage] = useState(1)
-  const pageSize = 3
+  const pageSize = 10
 
   // Lấy danh sách BasketShell từ API
   const {

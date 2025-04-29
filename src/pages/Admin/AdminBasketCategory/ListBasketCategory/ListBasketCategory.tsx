@@ -32,7 +32,7 @@ export default function ListBasketCategory() {
       // Refetch data or update the list after deletion
     },
     onError: (error: any) => {
-      toast.error(`❌ Xóa loại giỏ hàng thất bại: ${error.message}`)
+      toast.error(`❌ Xóa loại giỏ hàng thất bại`)
     }
   })
 
