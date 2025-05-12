@@ -69,7 +69,7 @@ const ProductPage: React.FC = () => {
             {/* Product Image */}
             {basket.images && basket.images[0] && (
               <img
-                className='w-full h-auto rounded-lg'
+                className='w-full h-[80%] rounded-lg'
                 height='300'
                 src={basket.images[0].imageUrl}
                 width='300'
@@ -78,14 +78,18 @@ const ProductPage: React.FC = () => {
             )}
 
             {/* Product Name - Always visible */}
-            <p className='mt-4 text-lg text-center font-medium underline'>{basket.name}</p>
-
+            <p
+              className='mt-4 text-lg text-center font-medium overflow-hidden text-ellipsis whitespace-nowrap'
+              style={{ maxWidth: '300px' }}
+            >
+              {basket.name}
+            </p>
             {/* Container for Prices and Add to Cart Button */}
             <div className='relative'>
               {/* Prices - Hidden on hover */}
-              <div className='text-center mt-2 flex gap-1 items-center transition-opacity duration-300 ease-in group-hover:opacity-0'>
+              <div className='text-center mt-2 flex gap-1 justify-center items-center transition-opacity duration-300 ease-in group-hover:opacity-0'>
                 <p className='text-gray-500 text-xl line-through'>{(basket.price + 500000).toLocaleString()} đ</p>
-                <p className='text-red-500 text-xl font-bold'>{basket.price.toLocaleString()} đ</p>
+                <p className='text-red-500 text-xl text font-bold'>{basket.price.toLocaleString()} đ</p>
               </div>
 
               {/* Add to Cart Button - Visible on hover */}

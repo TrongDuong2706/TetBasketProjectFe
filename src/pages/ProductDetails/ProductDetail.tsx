@@ -125,7 +125,7 @@ export default function ProductDetail() {
                     key={index}
                     src={thumbnail.imageUrl}
                     alt={`Thumbnail ${index + 1}`}
-                    className='flex-1 w-20 h-20 rounded-lg cursor-pointer border border-gray-300 hover:border-red-500'
+                    className='flex-1 w-24 rounded-lg cursor-pointer border border-gray-300 hover:border-red-500'
                   />
                 ))}
               </div>
@@ -283,22 +283,33 @@ export default function ProductDetail() {
           </div>
 
           {/* Related Products Section */}
+          {/* Related Products Section */}
           <div className='mt-8'>
             <h2 className='text-xl font-bold text-gray-800'>Sản Phẩm Liên Quan</h2>
             {basketLoading && <div>Đang tải....</div>}
             {basketError && <div>Lỗi hiển thị sản phẩm....</div>}
-            <div className='mt-4 grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div className='mt-4 grid grid-cols-1 md:grid-cols-3 gap-6'>
               {basketCategoryRelated?.map((product) => (
-                <Link to={`/product/${product.id}`}>
-                  <div key={product.id} className='border rounded-lg p-4'>
-                    <img
-                      src={product.images[0].imageUrl}
-                      alt={product.name}
-                      className='w-full h-32 object-cover rounded-lg'
-                    />
-                    <h3 className='text-lg font-semibold mt-2'>{product.name}</h3>
-                    <p className='text-red-500 font-bold mt-1'>{product.price}</p>
-                    <button className='mt-2 bg-red-500 text-white px-4 py-2 rounded-full'>Xem Chi Tiết</button>
+                <Link to={`/product/${product.id}`} key={product.id}>
+                  <div className='border rounded-lg p-4 shadow-lg hover:shadow-xl w-full transition-shadow duration-300 flex'>
+                    {/* Image Section */}
+                    <div className='flex-shrink-0'>
+                      <img
+                        src={product.images[0].imageUrl}
+                        alt={product.name}
+                        className='w-40 h-40 object-cover rounded-lg'
+                      />
+                    </div>
+
+                    {/* Product Details Section */}
+                    <div className='ml-4 flex flex-col justify-between'>
+                      <h3 className='text-xl font-semibold'>{product.name}</h3>
+                      <p className='text-red-500 font-bold mt-2'>{product.price.toLocaleString()}</p>
+                      <button className='mt-4 bg-red-500 text-white px-6 py-2 rounded-full w-36'>
+                        Xem Chi Tiết
+                      </button>{' '}
+                      {/* Fixed width */}
+                    </div>
                   </div>
                 </Link>
               ))}

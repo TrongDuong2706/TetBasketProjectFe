@@ -86,16 +86,14 @@ export default function AdminEditBasket() {
       categoryId: data.categoryId,
       status: data.status,
       basketShellId: data.basketShellId,
-      itemNames: items
+      itemNames: Array.from(new Set(items.filter((item) => item.trim() !== '')))
     }
 
     formData.append('basket', new Blob([JSON.stringify(basketData)], { type: 'application/json' }))
 
-    // Nếu không có ảnh mới, gửi flag để giữ ảnh cũ
     if (!data.images || data.images.length === 0) {
       formData.append('keepExistingImages', 'true')
     } else {
-      // Nếu có ảnh mới, chỉ gửi ảnh mới
       for (let i = 0; i < data.images.length; i++) {
         formData.append('images', data.images[i])
       }
@@ -103,6 +101,11 @@ export default function AdminEditBasket() {
 
     updateBasketMutation.mutate(formData)
   })
+
+  const handleRemoveItem = (indexToRemove: number) => {
+    const updatedItems = items.filter((_, idx) => idx !== indexToRemove)
+    setItems(updatedItems)
+  }
 
   if (basketLoading) return <p>Loading...</p>
 
@@ -236,15 +239,24 @@ export default function AdminEditBasket() {
           <label className='text-gray-700 mb-1'>Vật Phẩm</label>
           <div className='space-y-2'>
             {items.map((item, index) => (
-              <input
-                key={index}
-                type='text'
-                className='w-full p-2 border rounded-md'
-                placeholder='Nhập tên item'
-                value={item}
-                onChange={(e) => handleItemChange(index, e.target.value)}
-              />
+              <div key={index} className='flex gap-2'>
+                <input
+                  type='text'
+                  className='flex-1 p-2 border rounded-md'
+                  placeholder='Nhập tên item'
+                  value={item}
+                  onChange={(e) => handleItemChange(index, e.target.value)}
+                />
+                <button
+                  type='button'
+                  onClick={() => handleRemoveItem(index)}
+                  className='bg-red-500 text-white px-3 rounded-md hover:bg-red-600 transition'
+                >
+                  Xóa
+                </button>
+              </div>
             ))}
+
             <button
               type='button'
               className='bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition'

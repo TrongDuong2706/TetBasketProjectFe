@@ -30,6 +30,7 @@ export default function ListBasketCategory() {
     onSuccess: () => {
       toast.success('🎉 Xóa loại giỏ hàng thành công!')
       // Refetch data or update the list after deletion
+      window.location.reload()
     },
     onError: (error: any) => {
       toast.error(`❌ Xóa loại giỏ hàng thất bại`)

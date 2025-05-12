@@ -1,15 +1,22 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import React from 'react'
 import { getAllBasketByOrderId, getAllOrderByUserId } from 'src/apis/order.api'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/HomeHeader/Header'
 import { getUserId } from 'src/utils/auth'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 export default function ListOrderUser() {
-  const [page, setPage] = useState(0) // Trang bắt đầu từ 0
   const size = 4 // Số đơn hàng mỗi trang
   const userId = getUserId()
+
+  // Lấy và cập nhật searchParams từ URL
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = Number(searchParams.get('page')) || 0
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({ page: newPage.toString() })
+  }
 
   // Fetch orders by userId
   const { data, isLoading, error } = useQuery({
@@ -30,8 +37,6 @@ export default function ListOrderUser() {
       enabled: !!order.orderId
     }))
   })
-
-  console.log('data:', data?.data.result.elements)
 
   // Loading and error handling
   if (isLoading) return <div className='text-center mt-10'>Đang tải đơn hàng...</div>
@@ -123,10 +128,10 @@ export default function ListOrderUser() {
           })}
         </div>
 
-        {/* PHÂN TRANG - HIỂN THỊ CÁC SỐ TRANG */}
+        {/* PHÂN TRANG */}
         <div className='flex justify-center items-center mt-6 space-x-2'>
           <button
-            onClick={() => setPage((prev) => prev - 1)}
+            onClick={() => handlePageChange(page - 1)}
             disabled={!hasPreviousPage}
             className={`px-3 py-2 rounded-lg font-medium ${
               hasPreviousPage ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -138,7 +143,7 @@ export default function ListOrderUser() {
           {[...Array(totalPages)].map((_, index) => (
             <button
               key={index}
-              onClick={() => setPage(index)}
+              onClick={() => handlePageChange(index)}
               className={`px-4 py-2 rounded-lg font-medium ${
                 index === page ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
               }`}
@@ -148,7 +153,7 @@ export default function ListOrderUser() {
           ))}
 
           <button
-            onClick={() => setPage((prev) => prev + 1)}
+            onClick={() => handlePageChange(page + 1)}
             disabled={!hasNextPage}
             className={`px-3 py-2 rounded-lg font-medium ${
               hasNextPage ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'

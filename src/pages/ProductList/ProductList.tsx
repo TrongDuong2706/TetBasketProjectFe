@@ -219,7 +219,7 @@ export default function ProductList() {
           </button>
         </div>
 
-        <div className='mt-5 mb-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+        <div className='mt-5 mb-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6'>
           {isLoading ? (
             <p className='text-gray-500 text-center'>Đang tải...</p>
           ) : products.length > 0 ? (
@@ -245,7 +245,12 @@ export default function ProductList() {
 
                 {/* Product Name - Always visible */}
                 <Link to={`/product/${product.id}`}>
-                  <p className='mt-4 text-lg text-center font-medium underline'>{product.name}</p>
+                  <p
+                    className='mt-4 text-lg text-center font-medium overflow-hidden text-ellipsis whitespace-nowrap'
+                    style={{ maxWidth: '300px' }}
+                  >
+                    {product.name}
+                  </p>
                 </Link>
 
                 {/* Container for Prices and Add to Cart Button */}

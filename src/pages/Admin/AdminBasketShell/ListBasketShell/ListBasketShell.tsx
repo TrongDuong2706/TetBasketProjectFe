@@ -28,6 +28,7 @@ export default function ListBasketShell() {
     onSuccess: () => {
       toast.success('🎉 Xóa loại vỏ hàng thành công!')
       // Refetch data or update the list after deletion
+      window.location.reload()
     },
     onError: (error: any) => {
       toast.error(`❌ Xóa loại vỏ hàng thất bại: ${error.message}`)
